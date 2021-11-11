@@ -47,7 +47,7 @@ wildcard_constraints:
 
 def compile_output_list(wildcards):
     return [
-        "filtering/dummy/%s_%s.dummy.txt" % (sample, t)
+        "filter/filter_vcf_on_format/%s_%s.format_filt.vcf.gz" % (sample, t)
         for sample in get_samples(samples)
         for t in get_unit_types(units, sample)
     ]
