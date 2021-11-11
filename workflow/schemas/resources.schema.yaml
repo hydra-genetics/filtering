@@ -41,4 +41,42 @@ properties:
         description: memory used per cpu for 'filter_vcf_on_format'
       partition:
         type: string
-        description: partition to use on the cluser for 'filter_vcf_on_format'
+        description: partition to use on the cluster for 'filter_vcf_on_format'
+
+  artifact_filter:
+    type: object
+    properties:
+      threads:
+        type: integer
+        description: number of threads that will be used by 'artifact_filter'
+      time:
+        type: string
+        description: max execution time for 'artifact_filter'
+      mem_mb:
+        type: integer
+        description: memory used for 'artifact_filter'
+      mem_per_cpu:
+        type: integer
+        description: memory used per cpu for 'artifact_filter'
+      partition:
+        type: string
+        description: partition to use on the cluster for 'artifact_filter'
+
+  background_filter:
+    type: object
+    properties:
+      threads:
+        type: integer
+        description: number of threads that will be used by 'background_filter'
+      time:
+        type: string
+        description: max execution time for 'background_filter'
+      mem_mb:
+        type: integer
+        description: memory used for 'background_filter'
+      mem_per_cpu:
+        type: integer
+        description: memory used per cpu for 'background_filter'
+      partition:
+        type: string
+        description: partition to use on the cluster for 'background_filter'

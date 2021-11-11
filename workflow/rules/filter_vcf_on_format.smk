@@ -11,7 +11,7 @@ rule filter_vcf_on_format:
     input:
         vcf="snv_indels/ensemble_vcf/{sample}_{type}.ensembled.vep_annotated.vcf.gz",
     output:
-        vcf=temp("filter/filter_vcf_on_format/{sample}_{type}.format_filt.vcf.gz"),
+        vcf=temp("filter/filter_vcf_on_format/{sample}_{type}.format_filt.vcf"),
     params:
         filter=config.get("filter_vcf_on_format", {}).get("filter", "-i 'FORMAT/DP > 100 & FORMAT/AD > 20 & FORMAT/AF > 0.05'"),
         extra=config.get("filter_vcf_on_format", {}).get("extra", "--mode '+' --soft-filter 'DP_AD_AF'"),
