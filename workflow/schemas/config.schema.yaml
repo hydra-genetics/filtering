@@ -17,3 +17,19 @@ properties:
     - units
     - resources
     - default_container
+
+  filter_vcf_on_format:
+    type: object
+    properties:
+      benchmark_repeats:
+        type: integer
+        description: set number of times benchmark should be repeated for filter_vcf_on_format
+      container:
+        type: string
+        description: name or path to docker/singularity container
+      filter:
+        type: string
+        description: filtering parameters to filter_vcf_on_format
+      extra:
+        type: string
+        description: extra parameters to filter_vcf_on_format

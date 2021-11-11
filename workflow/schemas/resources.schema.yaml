@@ -11,6 +11,34 @@ properties:
       time:
         type: string
         description: default max execution time for a rule
+      mem_mb:
+        type: integer
+        description: default memory used for a rule
+      mem_per_cpu:
+        type: integer
+        description: default memory used per cpu for a rule
+      partition:
+        type: string
+        description: default partition to use on the cluser for a rule
 
   required:
     - default_resources
+
+  filter_vcf_on_format:
+    type: object
+    properties:
+      threads:
+        type: integer
+        description: number of threads that will be used by 'filter_vcf_on_format'
+      time:
+        type: string
+        description: max execution time for 'filter_vcf_on_format'
+      mem_mb:
+        type: integer
+        description: memory used for 'filter_vcf_on_format'
+      mem_per_cpu:
+        type: integer
+        description: memory used per cpu for 'filter_vcf_on_format'
+      partition:
+        type: string
+        description: partition to use on the cluser for 'filter_vcf_on_format'
