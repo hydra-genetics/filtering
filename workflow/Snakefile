@@ -9,6 +9,8 @@ __license__ = "GPL-3"
 
 include: "rules/common.smk"
 include: "rules/filter_vcf_on_format.smk"
+include: "rules/artifact_filter.smk"
+include: "rules/background_filter.smk"
 
 
 report: "report/workflow.rst"

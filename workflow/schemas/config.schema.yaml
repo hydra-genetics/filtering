@@ -33,3 +33,36 @@ properties:
       extra:
         type: string
         description: extra parameters to filter_vcf_on_format
+
+  artifact_filter:
+    type: object
+    properties:
+      benchmark_repeats:
+        type: integer
+        description: set number of times benchmark should be repeated for artifact_filter
+      container:
+        type: string
+        description: name or path to docker/singularity container
+      artifacts:
+        type: string
+        description: file with artifact data used in artifact_filter
+      required:
+        - artifacts
+
+  background_filter:
+    type: object
+    properties:
+      benchmark_repeats:
+        type: integer
+        description: set number of times benchmark should be repeated for background_filter
+      container:
+        type: string
+        description: name or path to docker/singularity container
+      nr_min_sd:
+        type: integer
+        description: number of standard deviations from median to not get a filter flag
+      background:
+        type: string
+        description: file with background level data used in background_filter
+      required:
+        - background

@@ -11,15 +11,15 @@ rule filter_vcf_on_format:
     input:
         vcf="snv_indels/ensemble_vcf/{sample}_{type}.ensembled.vep_annotated.vcf.gz",
     output:
-        vcf=temp("filter/filter_vcf_on_format/{sample}_{type}.format_filt.vcf.gz"),
+        vcf=temp("filtering/filter_vcf_on_format/{sample}_{type}.format_filt.vcf"),
     params:
         filter=config.get("filter_vcf_on_format", {}).get("filter", "-i 'FORMAT/DP > 100 & FORMAT/AD > 20 & FORMAT/AF > 0.05'"),
         extra=config.get("filter_vcf_on_format", {}).get("extra", "--mode '+' --soft-filter 'DP_AD_AF'"),
     log:
-        "filter/filter_vcf_on_format/{sample}_{type}.log",
+        "filtering/filter_vcf_on_format/{sample}_{type}.log",
     benchmark:
         repeat(
-            "filter/filter_vcf_on_format/{sample}_{type}.benchmark.tsv",
+            "filtering/filter_vcf_on_format/{sample}_{type}.benchmark.tsv",
             config.get("filter_vcf_on_format", {}).get("benchmark_repeats", 1),
         )
     threads: config.get("filter_vcf_on_format", {}).get("threads", config["default_resources"]["threads"])
@@ -34,6 +34,6 @@ rule filter_vcf_on_format:
     conda:
         "../envs/filter_vcf_on_format.yaml"
     message:
-        "{rule}: Filter vcf filter/filter_vcf_on_format/{wildcards.sample}_{wildcards.type} based on format"
+        "{rule}: Filter vcf filtering/filter_vcf_on_format/{wildcards.sample}_{wildcards.type} based on format"
     wrapper:
         "0.72.0/bio/bcftools/filter"
