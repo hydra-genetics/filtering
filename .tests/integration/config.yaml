@@ -5,4 +5,4 @@ units: "units.tsv"
 default_container: "docker://hydragenetics/common:0.0.1"
 
 filter_vcf_on_format:
-  container: "docker://gmsuppsala/somatic:develop"
+  container: "docker://hydragenetics/common:0.0.1"
