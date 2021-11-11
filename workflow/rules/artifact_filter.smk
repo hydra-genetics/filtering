@@ -9,15 +9,15 @@ __license__ = "GPL-3"
 
 rule artifact_filter:
     input:
-        vcf="filter/filter_vcf_on_format/{sample}_{type}.format_filt.vcf",
+        vcf="filtering/filter_vcf_on_format/{sample}_{type}.format_filt.vcf",
         artifacts=config["artifact_filter"]["artifacts"],
     output:
-        vcf=temp("filter/artifact_filter/{sample}_{type}.artifact_filter.vcf"),
+        vcf=temp("filtering/artifact_filter/{sample}_{type}.artifact_filter.vcf"),
     log:
-        "filter/artifact_filter/{sample}_{type}.log",
+        "filtering/artifact_filter/{sample}_{type}.log",
     benchmark:
         repeat(
-            "filter/artifact_filter/{sample}_{type}.benchmark.tsv",
+            "filtering/artifact_filter/{sample}_{type}.benchmark.tsv",
             config.get("artifact_filter", {}).get("benchmark_repeats", 1),
         )
     threads: config.get("artifact_filter", {}).get("threads", config["default_resources"]["threads"])

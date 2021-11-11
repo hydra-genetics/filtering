@@ -9,17 +9,17 @@ __license__ = "GPL-3"
 
 rule background_filter:
     input:
-        vcf="filter/artifact_filter/{sample}_{type}.artifact_filter.vcf",
+        vcf="filtering/artifact_filter/{sample}_{type}.artifact_filter.vcf",
         background=config["background_filter"]["background"],
     output:
-        vcf=temp("filter/background_filter/{sample}_{type}.background_filter.vcf"),
+        vcf=temp("filtering/background_filter/{sample}_{type}.background_filter.vcf"),
     params:
         nr_min_sd=config.get("background_filter", {}).get("nr_min_sd", 5),
     log:
-        "filter/background_filter/{sample}_{type}.log",
+        "filtering/background_filter/{sample}_{type}.log",
     benchmark:
         repeat(
-            "filter/background_filter/{sample}_{type}.benchmark.tsv",
+            "filtering/background_filter/{sample}_{type}.benchmark.tsv",
             config.get("background_filter", {}).get("benchmark_repeats", 1),
         )
     threads: config.get("background_filter", {}).get("threads", config["default_resources"]["threads"])
