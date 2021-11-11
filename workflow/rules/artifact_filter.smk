@@ -32,6 +32,6 @@ rule artifact_filter:
     conda:
         "../envs/artifact_filter.yaml"
     message:
-        "{rule}: Artifact filter vcf in filter/artifact_filter/{wildcards.sample}_{wildcards.type}"
+        "{rule}: Artifact filter vcf in filtering/artifact_filter/{wildcards.sample}_{wildcards.type}"
     script:
         "../scripts/artifact_filter.py"

@@ -47,7 +47,7 @@ wildcard_constraints:
 
 def compile_output_list(wildcards):
     return [
-        "filter/background_filter/%s_%s.background_filter.vcf" % (sample, t)
+        "filtering/background_filter/%s_%s.background_filter.vcf" % (sample, t)
         for sample in get_samples(samples)
         for t in get_unit_types(units, sample)
     ]

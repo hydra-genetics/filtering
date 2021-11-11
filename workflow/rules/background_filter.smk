@@ -34,6 +34,6 @@ rule background_filter:
     conda:
         "../envs/background_filter.yaml"
     message:
-        "{rule}: Background filter vcf in filter/background_filter/{wildcards.sample}_{wildcards.type}"
+        "{rule}: Background filter vcf in filtering/background_filter/{wildcards.sample}_{wildcards.type}"
     script:
         "../scripts/background_filter.py"
