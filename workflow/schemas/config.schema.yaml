@@ -66,3 +66,16 @@ properties:
         description: file with background level data used in background_filter
       required:
         - background
+
+  add_multi_snv_in_codon:
+    type: object
+    properties:
+      benchmark_repeats:
+        type: integer
+        description: set number of times benchmark should be repeated for add_multi_snv_in_codon
+      container:
+        type: string
+        description: name or path to docker/singularity container
+      use_filter:
+        type: string
+        description: When 'True' only those position with filter 'PASS' are considered

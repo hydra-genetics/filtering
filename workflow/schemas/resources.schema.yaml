@@ -80,3 +80,22 @@ properties:
       partition:
         type: string
         description: partition to use on the cluster for 'background_filter'
+
+  add_multi_snv_in_codon:
+    type: object
+    properties:
+      threads:
+        type: integer
+        description: number of threads that will be used by 'add_multi_snv_in_codon'
+      time:
+        type: string
+        description: max execution time for 'add_multi_snv_in_codon'
+      mem_mb:
+        type: integer
+        description: memory used for 'add_multi_snv_in_codon'
+      mem_per_cpu:
+        type: integer
+        description: memory used per cpu for 'add_multi_snv_in_codon'
+      partition:
+        type: string
+        description: partition to use on the cluster for 'add_multi_snv_in_codon'
