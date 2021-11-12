@@ -12,6 +12,9 @@ include: "rules/filter_vcf_on_format.smk"
 include: "rules/artifact_filter.smk"
 include: "rules/background_filter.smk"
 include: "rules/add_multi_snv_in_codon.smk"
+include: "rules/sort_vcf.smk"
+include: "rules/bgzip_vcf.smk"
+include: "rules/tabix_vcf.smk"
 
 
 report: "report/workflow.rst"

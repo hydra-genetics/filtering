@@ -12,3 +12,9 @@ artifact_filter:
 
 background_filter:
   background: "reference/background_panel_HES45.tsv"
+
+bgzip_vcf:
+  container: "docker://gmsuppsala/somatic:develop"
+
+tabix_vcf:
+  container: "docker://gmsuppsala/somatic:develop"

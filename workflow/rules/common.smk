@@ -47,7 +47,7 @@ wildcard_constraints:
 
 def compile_output_list(wildcards):
     return [
-        "filtering/add_multi_snv_in_codon/%s_%s.codon_snvs.vcf" % (sample, t)
+        "filtering/add_multi_snv_in_codon/%s_%s.codon_snvs.sorted.vcf.gz" % (sample, t)
         for sample in get_samples(samples)
         for t in get_unit_types(units, sample)
     ]
