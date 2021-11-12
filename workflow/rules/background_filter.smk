@@ -10,7 +10,7 @@ __license__ = "GPL-3"
 rule background_filter:
     input:
         vcf="filtering/artifact_filter/{sample}_{type}.artifact_filter.vcf",
-        background=config["background_filter"]["background"],
+        background=config["reference"]["background"],
     output:
         vcf=temp("filtering/background_filter/{sample}_{type}.background_filter.vcf"),
     params:

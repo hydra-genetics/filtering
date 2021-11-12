@@ -18,6 +18,18 @@ properties:
     - resources
     - default_container
 
+  reference:
+    artifacts:
+      type: string
+      description: file with artifact data used in artifact_filter
+    background:
+      type: string
+      description: file with background level data used in background_filter
+    required:
+      - artifacts
+      - background
+
+
   filter_vcf_on_format:
     type: object
     properties:
@@ -43,11 +55,6 @@ properties:
       container:
         type: string
         description: name or path to docker/singularity container
-      artifacts:
-        type: string
-        description: file with artifact data used in artifact_filter
-      required:
-        - artifacts
 
   background_filter:
     type: object
@@ -61,8 +68,3 @@ properties:
       nr_min_sd:
         type: integer
         description: number of standard deviations from median to not get a filter flag
-      background:
-        type: string
-        description: file with background level data used in background_filter
-      required:
-        - background
