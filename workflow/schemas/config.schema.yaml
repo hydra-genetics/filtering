@@ -68,3 +68,49 @@ properties:
       nr_min_sd:
         type: integer
         description: number of standard deviations from median to not get a filter flag
+
+  add_multi_snv_in_codon:
+    type: object
+    properties:
+      benchmark_repeats:
+        type: integer
+        description: set number of times benchmark should be repeated for add_multi_snv_in_codon
+      container:
+        type: string
+        description: name or path to docker/singularity container
+      use_filter:
+        type: string
+        description: When 'True' only those position with filter 'PASS' are considered
+
+  sort_vcf:
+    type: object
+    properties:
+      benchmark_repeats:
+        type: integer
+        description: set number of times benchmark should be repeated for sort_vcf
+      container:
+        type: string
+        description: name or path to docker/singularity container
+
+  bgzip_vcf:
+    type: object
+    properties:
+      benchmark_repeats:
+        type: integer
+        description: set number of times benchmark should be repeated for bgzip_vcf
+      container:
+        type: string
+        description: name or path to docker/singularity container
+
+  tabix_vcf:
+    type: object
+    properties:
+      benchmark_repeats:
+        type: integer
+        description: set number of times benchmark should be repeated for tabix_vcf
+      container:
+        type: string
+        description: name or path to docker/singularity container
+      extra:
+        type: string
+        description: extra parameters to tabix_vcf

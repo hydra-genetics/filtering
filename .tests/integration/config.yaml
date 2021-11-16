@@ -7,3 +7,9 @@ default_container: "docker://hydragenetics/common:0.0.1"
 reference:
   artifacts: "reference/artifact_positions_chr1.txt"
   background: "reference/background_panel_HES45.tsv"
+
+bgzip_vcf:
+  container: "docker://gmsuppsala/somatic:develop"
+
+tabix_vcf:
+  container: "docker://gmsuppsala/somatic:develop"
