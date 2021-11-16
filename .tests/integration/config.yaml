@@ -6,11 +6,7 @@ default_container: "docker://hydragenetics/common:0.0.1"
 
 reference:
   fasta: "reference/HES45.fna"
-
-artifact_filter:
   artifacts: "reference/artifact_positions_chr1.txt"
-
-background_filter:
   background: "reference/background_panel_HES45.tsv"
 
 bgzip_vcf:
