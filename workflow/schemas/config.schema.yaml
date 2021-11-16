@@ -19,6 +19,9 @@ properties:
     - default_container
 
   reference:
+    fasta: 
+      type: string
+      description: file with reference fasta file
     artifacts:
       type: string
       description: file with artifact data used in artifact_filter
@@ -26,6 +29,7 @@ properties:
       type: string
       description: file with background level data used in background_filter
     required:
+      - fasta
       - artifacts
       - background
 
