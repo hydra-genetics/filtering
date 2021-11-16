@@ -5,6 +5,7 @@ units: "units.tsv"
 default_container: "docker://hydragenetics/common:0.0.1"
 
 reference:
+  fasta: "reference/HES45.fna"
   artifacts: "reference/artifact_positions_chr1.txt"
   background: "reference/background_panel_HES45.tsv"
 
