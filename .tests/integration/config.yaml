@@ -10,7 +10,7 @@ reference:
   background: "reference/background_panel_HES45.tsv"
 
 bgzip_vcf:
-  container: "docker://gmsuppsala/somatic:develop"
+  container: "docker://hydragenetics/common:0.0.1"
 
 tabix_vcf:
-  container: "docker://gmsuppsala/somatic:develop"
+  container: "docker://hydragenetics/common:0.0.1"
