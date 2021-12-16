@@ -14,3 +14,15 @@ bgzip_vcf:
 
 tabix_vcf:
   container: "docker://hydragenetics/common:0.0.1"
+
+add_multi_snv_in_codon:
+  container: "docker://hydragenetics/common:0.0.1"
+
+background_filter:
+  container: "docker://hydragenetics/common:0.0.1"
+
+sort_vcf:
+  container: "docker://hydragenetics/common:0.0.1"
+
+artifact_filter:
+  container: "docker://hydragenetics/common:0.0.1"
