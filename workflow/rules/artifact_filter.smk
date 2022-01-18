@@ -9,7 +9,7 @@ __license__ = "GPL-3"
 
 rule artifact_filter:
     input:
-        vcf="filtering/filter_vcf_on_format/{sample}_{type}.format_filt.vcf",
+        vcf="filtering/soft_filter_vcf/{sample}_{type}.soft_filt.vcf",
         artifacts=config["reference"]["artifacts"],
     output:
         vcf=temp("filtering/artifact_filter/{sample}_{type}.artifact_filter.vcf"),
