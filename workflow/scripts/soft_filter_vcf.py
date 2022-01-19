@@ -20,6 +20,114 @@ def is_float(element) -> bool:
     except ValueError:
         return False
 
+def parse_filter_expression(filter):
+    def parse_helper(f_iterator):
+        """
+        function used to parse a string with parantes and create a nested fail_filter_list
+
+        :param f_iterator: filter string that will be parsed
+        :type f_iterator: string iterator
+
+        :return: return a nested list
+        """
+        data = []
+        filter_string = ''
+        for item in f_iterator:
+            if item == '(':
+                result, closing_parantes = parse_helper(f_iterator)
+                if len(result) == 1:
+                    result = result[0]
+                data.append(result)
+                if not closing_parantes:
+                    raise SyntaxError("Missing closing parantes!")
+            elif item == ')':
+                if len(filter_string) != 0:
+                    data.append(filter_string)
+                return data, True
+            else:
+                filter_string += item
+                if filter_string.startswith(' or '):
+                    data.append(lambda v1, v2: v1 or v2)
+                    result, p_found = parse_helper(f_iterator)
+                    if len(result) == 1:
+                        result = result[0]
+                    data.append(result)
+                    return data, p_found
+                elif filter_string.startswith(' and '):
+                    data.append(lambda v1, v2: v1 and v2)
+                    result, p_found = parse_helper(f_iterator)
+                    if len(result) == 1:
+                        result = result[0]
+                    data.append(result)
+                    return data, p_found
+                elif filter_string.endswith(' or '):
+                    data.append(filter_string[:-4])
+                    data.append(lambda v1, v2: v1 or v2 )
+                    result, p_found = parse_helper(f_iterator)
+                    if len(result) == 1:
+                        result = result[0]
+                    data.append(result)
+                    return data, p_found
+                elif filter_string.endswith(' and '):
+                    data.append(filter_string[:-5])
+                    data.append(lambda v1, v2: v1 and v2)
+                    result, p_found = parse_helper(f_iterator)
+                    if len(result) == 1:
+                        result = result[0]
+                    data.append(result)
+                    return data, p_found
+        if len(filter_string) != 0:
+            data.append(filter_string)
+        return data, False
+
+    return parse_helper(iter(filter))
+
+
+    def process_string(data):
+        """
+        dummy function used to parse filter strings
+
+        test1 = "( true or false) and (true and true)"
+        Evaluate to False
+        test2 = "((true and false) and true)"
+
+        moved to test later
+        """
+        data = data.rstrip(' ').lstrip(' ')
+        if 'true' == data:
+            return True
+        elif 'false' == data:
+            return False
+        else:
+            raise Exception("Unhandled filter substring: {}!".format(data))
+
+    def evaluate_expression(data, process_function=process_string):
+        """
+        function used to go through a nested list and evaluate the content using a helper process_function
+
+        :param data: a nested list with strings that should be evaluated
+        :type data: nested list
+        :param process_function: function used to evaluate string
+        :type process_function: a function
+        :param
+
+        :return: same as process function returns
+        """
+        if isinstance(data, str):
+            return process_function(data)
+        elif isinstance(data, list):
+            if len(data) == 3:
+                return data[1](evaluate_expression(data[0]),evaluate_expression(data[2]))
+            elif len(data) == 1:
+                return evaluate_expression(data[0])
+            else:
+                raise Exception("Unhandled data structure case {}, unexpected number of items {}!".format(data, len(data)))
+        else:
+            print(str(isinstance(data, str)) + " " + str(len(data)) + " " + str(data))
+            raise Exception("Unhandled data structure case {}!".format(data))
+
+
+
 
 filters = {"filters": []}
 if filter_yaml_file is not None:
