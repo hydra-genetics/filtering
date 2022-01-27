@@ -1,0 +1,3 @@
+filters:
+  ad:
+    expression: "FORMAT:AD:1 > 10 and PLCH2 = VEP:SYMBOL"

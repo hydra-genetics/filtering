@@ -1,0 +1,3 @@
+filters:
+  gene_and_allele:
+    expression: "VEP:SYMBOL = PLCH2 and (VEP:Allele = T or VEP:Allele = A )"

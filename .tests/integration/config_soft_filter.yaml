@@ -1,41 +1,4 @@
 filters:
-  germline1:
-    decription: "Variants in 1000G with MAF > 0.01"
-    annotation: "VEP"
-    fields: ["AF"]
-    tests: [0.01]
-    test_operators: ["<"]
-    logical_operator: "or"
-    filter_string: "germline1"
-  germline2:
-    decription: "Variants in 1000G with MAF > 0.01 but not in clinvar"
-    annotation: "VEP"
-    fields: ["AF", "CLIN_SIG"]
-    tests: [0.01, ""]
-    test_operators: [">", "="]
-    logical_operator: "and"
-    filter_string: "germline2"
-  DP:
-    decription: "Variants with DP<100"
-    annotation: "FORMAT"
-    fields: ["DP"]
-    tests: [100]
-    test_operators: ["<"]
-    filter_string: "DP"
-  AD:
-    decription: "Variants with AD<20"
-    annotation: "FORMAT"
-    fields: ["AD"]
-    indexes: [1]
-    tests: [100]
-    test_operators: ["<"]
-    filter_string: "AD"
-  AD_AF_DP:
-    decription: "Variants with DP<10 or AF<0.05 or DP<100"
-    annotation: "FORMAT"
-    fields: ["AD", "AF", "DP"]
-    indexes: [1, 0, ""]
-    tests: [20, 0.05, 100]
-    test_operators: ["<", "<", "<"]
-    logical_operator: "or"
-    filter_string: "AD_AF_DP"
+  gene:
+    decription: "Valida gene"
+    expression: "VEP:SYMBOL = SAMD11"
