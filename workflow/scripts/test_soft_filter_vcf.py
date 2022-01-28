@@ -10,7 +10,7 @@ from soft_filter_vcf import _parse_helper
 from soft_filter_vcf import _convert_string
 from soft_filter_vcf import _and_function
 from soft_filter_vcf import _or_function
-from soft_filter_vcf import create_convert_expresion_function
+from soft_filter_vcf import create_convert_expression_function
 from soft_filter_vcf import extract_format_data
 
 class TestUnitUtils(unittest.TestCase):
@@ -59,7 +59,7 @@ class TestUnitUtils(unittest.TestCase):
         variant_filter = create_variant_filter(test2, process_string)
         self.assertEqual(variant_filter(""), False)
 
-    def test_create_convert_expresion(self):
+    def test_create_convert_expression(self):
         test_table = {
                         "chr1:934486-934487": True, # SAMD11
                         "chr1:935221-935222": True, # SAMD11
@@ -77,15 +77,15 @@ class TestUnitUtils(unittest.TestCase):
                     vep_fields = {v: c for c, v in enumerate(record['Description'].split("Format: ")[1].split("|"))}
                     annotation_extractor["VEP"] = utils.get_annoation_data_vep(vep_fields)
         annotation_extractor['FORMAT'] = extract_format_data
-        expresion_converter = create_convert_expresion_function(annotation_extractor)
+        expression_converter = create_convert_expression_function(annotation_extractor)
         filters = {"filters": []}
         with open(".tests/integration/config_soft_filter.yaml") as file:
             filters = yaml.load(file, Loader=yaml.FullLoader)
         vcf_filters = []
         for filter, value in filters["filters"].items():
             #data, _ = _parse_helper(iter(value['expression']))
-            #vcf_filters.append(_convert_string(data, expresion_converter))
-            vcf_filters.append(create_variant_filter(value['expression'], expresion_converter))
+            #vcf_filters.append(_convert_string(data, expression_converter))
+            vcf_filters.append(create_variant_filter(value['expression'], expression_converter))
         for variant in variants:
             for vcf_filter in vcf_filters:
                 try:
@@ -108,7 +108,7 @@ class TestUnitUtils(unittest.TestCase):
         vcf_filters = []
         for filter, value in filters["filters"].items():
             # Create filter from expression
-            vcf_filters.append(create_variant_filter(value['expression'], expresion_converter))
+            vcf_filters.append(create_variant_filter(value['expression'], expression_converter))
 
         variants = VariantFile(".tests/integration/snv_indels/ensemble_vcf/HD832.HES45_T.ensembled.vep_annotated.vcf.gz")
         for variant in variants:
@@ -133,7 +133,7 @@ class TestUnitUtils(unittest.TestCase):
         vcf_filters = []
         for filter, value in filters["filters"].items():
             # Create filter from expression
-            vcf_filters.append(create_variant_filter(value['expression'], expresion_converter))
+            vcf_filters.append(create_variant_filter(value['expression'], expression_converter))
 
         variants = VariantFile(".tests/integration/snv_indels/ensemble_vcf/HD832.HES45_T.ensembled.vep_annotated.vcf.gz")
         for variant in variants:
@@ -158,7 +158,7 @@ class TestUnitUtils(unittest.TestCase):
         vcf_filters = []
         for filter, value in filters["filters"].items():
             # Create filter from expression
-            vcf_filters.append(create_variant_filter(value['expression'], expresion_converter))
+            vcf_filters.append(create_variant_filter(value['expression'], expression_converter))
 
         variants = VariantFile(".tests/integration/snv_indels/ensemble_vcf/HD832.HES45_T.ensembled.vep_annotated.vcf.gz")
         for variant in variants:
@@ -183,7 +183,7 @@ class TestUnitUtils(unittest.TestCase):
         vcf_filters = []
         for filter, value in filters["filters"].items():
             # Create filter from expression
-            vcf_filters.append(create_variant_filter(value['expression'], expresion_converter))
+            vcf_filters.append(create_variant_filter(value['expression'], expression_converter))
 
         variants = VariantFile(".tests/integration/snv_indels/ensemble_vcf/HD832.HES45_T.ensembled.vep_annotated.vcf.gz")
         for variant in variants:

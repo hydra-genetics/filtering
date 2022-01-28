@@ -7,8 +7,6 @@ from hydra_genetics.utils.io import utils
 from pysam import VariantFile
 
 
-
-
 def is_float(element) -> bool:
     try:
         float(element)
@@ -16,8 +14,10 @@ def is_float(element) -> bool:
     except ValueError:
         return False
 
+
 _and_function = lambda v1, v2: v1 and v2
 _or_function = lambda v1, v2: v1 or v2
+
 
 def _parse_helper(f_iterator):
     """
@@ -78,6 +78,7 @@ def _parse_helper(f_iterator):
         data.append(filter_string)
     return data, False
 
+
 def _convert_string(data, process_function):
     """
     converts a nested list of string into functions
@@ -99,6 +100,7 @@ def _convert_string(data, process_function):
             raise Exception("Unhandled data structure case {}, unexpected number of items {}!".format(data, len(data)))
     else:
         raise Exception("Unhandled data structure case {}\ntype: {}\nlength: {}".format(data, type(data), len(data)))
+
 
 def _evaluate_expression(data, variant):
     """
@@ -124,13 +126,14 @@ def _evaluate_expression(data, variant):
     else:
         raise Exception("Unhandled data structure case {}!".format(data))
 
+
 def create_variant_filter(filter, string_parser):
     data, _ = _parse_helper(iter(filter))
     data = _convert_string(data, string_parser)
     return lambda variant: _evaluate_expression(data, variant)
 
 
-def create_convert_expresion_function(annotation_extractors):
+def create_convert_expression_function(annotation_extractors):
     """
 
     :param annotation_extractors: dict with functions that can extract annotatiors
@@ -156,7 +159,7 @@ def create_convert_expresion_function(annotation_extractors):
                 value1 = value2[index1]
             return comparison(value1, value2)
 
-    def convert_to_expresion(expression):
+    def convert_to_expression(expression):
         """
         :params expression: VEP:AF
         :type expression: string
@@ -172,7 +175,7 @@ def create_convert_expresion_function(annotation_extractors):
             raise Exception("Invalid expression: " + expression)
         regex_string = "[ ]*(VEP|FORMAT|INFO):([A-Za-z0-9_.]+):*([0-9]*)"
 
-        if "VEP:" in data[0] or "FORMAT:" in data[0] or  "INFO:" in data[0]:
+        if "VEP:" in data[0] or "FORMAT:" in data[0] or "INFO:" in data[0]:
             source, field, index = re.search(regex_string, data[0]).groups()
             if len(index) == 0:
                 index = None
@@ -181,10 +184,18 @@ def create_convert_expresion_function(annotation_extractors):
             try:
                 data[2] = data[2].rstrip(" ").lstrip(" ")
                 value2 = float(data[2])
-                return lambda variant: compare_data(comparison[data[1]], annotation_extractors[source](variant, field), value2, index1=index)
+                return lambda variant: compare_data(
+                                                        comparison[data[1]],
+                                                        annotation_extractors[source](variant, field),
+                                                        value2, index1=index
+                                                    )
             except ValueError:
-                return lambda variant: compare_data(comparison[data[1]], annotation_extractors[source](variant, field), data[2], index1=index)
-        elif "VEP:" in data[2] or "FORMAT:" in data[2] or  "INFO:" in data[2]:
+                return lambda variant: compare_data(
+                                                        comparison[data[1]],
+                                                        annotation_extractors[source](variant, field),
+                                                        data[2], index1=index
+                                                    )
+        elif "VEP:" in data[2] or "FORMAT:" in data[2] or "INFO:" in data[2]:
             source, field, index = re.search(regex_string, data[2]).groups()
             if len(index) == 0:
                 index = None
@@ -193,17 +204,51 @@ def create_convert_expresion_function(annotation_extractors):
             try:
                 data[0] = data[0].rstrip(" ").lstrip(" ")
                 value1 = float(data[0])
-                return lambda variant: compare_data(comparison[data[1]], value1, annotation_extractors[source](variant, field), index2=index)
+                return lambda variant: compare_data(
+                                                        comparison[data[1]],
+                                                        value1,
+                                                        annotation_extractors[source](variant, field),
+                                                        index2=index
+                                                    )
             except ValueError:
-                return lambda variant: compare_data(comparison[data[1]], data[0], annotation_extractors[source](variant, field), index2=index)
+                return lambda variant: compare_data(
+                                                        comparison[data[1]],
+                                                        data[0],
+                                                        annotation_extractors[source](variant, field),
+                                                        index2=index
+                                                    )
         else:
             raise Exception("Could not find comparison field in: " + expression)
 
-    return convert_to_expresion
+    return convert_to_expression
+
 
 # ToDo Move to tools ? and maybe check correct sample?
 def extract_format_data(variant, field):
     return variant.samples[0][field]
+
+
+def check_yaml_file(filters):
+    for filter in filters["filters"]:
+        if "expression" not in filters["filters"][filter]:
+            raise Exception("No expression entry for %s" % filter)
+        filter_text = ""
+        if (
+                "soft_filter" not in filters["filters"][filter] or
+                ("soft_filter" in filters["filters"][filter] and filters["filters"][filter]["soft_filter"] != "False")
+        ):
+            if "soft_filter_flag" not in filters["filters"][filter]:
+                raise Exception("No soft_filter_flag entry for %s" % filter)
+            if "description" not in filters["filters"][filter]:
+                filter_text = "Failed %s filter" % filter
+            else:
+                filter_text = filters["filters"][filter]["description"]
+        elif "description" not in filters["filters"][filter]:
+            filter_text = "Failed %s filter (hard filtered)" % filter
+        else:
+            filter_text = "%s %s" % (filters["filters"][filter]["description"], "(hard filtered)")
+        variants.header.filters.add(filters["filters"][filter]["soft_filter_flag"], None, None, filter_text)
+
 
 if __name__ == "__main__":
     in_vcf = snakemake.input.vcf
@@ -213,6 +258,7 @@ if __name__ == "__main__":
     variants = VariantFile(in_vcf)
     log = logging.getLogger()
 
+    log.info("Load yaml filter config file")
     filters = {"filters": []}
     if filter_yaml_file is not None:
         log.info("Process yaml for: {}".format(filter_yaml_file))
@@ -220,100 +266,43 @@ if __name__ == "__main__":
             filters = yaml.load(file, Loader=yaml.FullLoader)
 
     log.info("Checking yaml file parameters")
-    for filter in filters["filters"]:
-        fields_len = 0
-        tests_len = 0
-        test_operators_len = 0
-        if "annotation" in filters["filters"][filter]:
-            if filters["filters"][filter]["annotation"] not in ["VEP", "FORMAT"]:
-                raise Exception("Unknown annotation: %s" % filters["filters"][filter]["annotation"])
-        else:
-            raise Exception("No annotation entry for %s" % filter)
-        if "fields" in filters["filters"][filter]:
-            fields_len = len(filters["filters"][filter]["fields"])
-        else:
-            raise Exception("No fields entry for %s" % filter)
-        if "tests" in filters["filters"][filter]:
-            tests_len = len(filters["filters"][filter]["tests"])
-        else:
-            raise Exception("No tests entry for %s" % filter)
-        if "test_operators" in filters["filters"][filter]:
-            test_operators_len = len(filters["filters"][filter]["test_operators"])
-            for operator in filters["filters"][filter]["test_operators"]:
-                if operator not in ["<", ">", "=", "!="]:
-                    raise Exception("Unknown test operator: %s" % operator)
-        else:
-            raise Exception("No test_operators entry for %s" % filter)
-        if not(fields_len == tests_len and tests_len == test_operators_len):
-            raise Exception("Different length for fields, tests, and test_operators %s" % filter)
-        if "logical_operator" in filters["filters"][filter]:
-            if filters["filters"][filter]["logical_operator"] not in ["or", "and"]:
-                raise Exception("Unknown logical operator: %s" % logical_operator)
-        if "filter_string" in filters["filters"][filter]:
-            filter_text = "Failed %s filter" % filter
-            if "description" in filters["filters"][filter]:
-                filter_text = filters["filters"][filter]["description"]
-            variants.header.filters.add(filters["filters"][filter]["filter_string"], None, None, filter_text)
-        else:
-            raise Exception("No filter_string entry for %s" % filter)
+    check_yaml_file(filters)
 
     log.info("Process vcf header: {}".format(in_vcf))
+    annotation_extractor = {}
     for record in variants.header.records:
         if record.type == "INFO":
             if record['ID'] == "CSQ":
                 log.info(" -- found vep information: {}".format(in_vcf))
                 log.debug(" -- -- {}".format(record['Description'].split("Format: ")[1].split("|")))
                 vep_fields = {v: c for c, v in enumerate(record['Description'].split("Format: ")[1].split("|"))}
-                annotation_extractor = utils.get_annoation_data_vep(vep_fields)
+                annotation_extractor["VEP"] = utils.get_annoation_data_vep(vep_fields)
 
     vcf_out = VariantFile(out_vcf, 'w', header=variants.header)
 
-    log.info("Processing variants")
+    log.info("Process variants")
+    annotation_extractor['FORMAT'] = extract_format_data
+    expression_converter = create_convert_expression_function(annotation_extractor)
+
+    vcf_filters = []
+    soft_filters = []
+    for filter, value in filters["filters"].items():
+        vcf_filters.append(create_variant_filter(value['expression'], expression_converter))
+        if "soft_filter" in filters["filters"][filter]:
+            soft_filters.append([filter, filters["filters"][filter]["soft_filter"] != "False"])
+        else :
+            soft_filters.append([filter, True])
     for variant in variants:
-        for filter in filters["filters"]:
-            i = 0
-            fail_filter_list = []
-            for field in filters["filters"][filter]["fields"]:
-                data = ""
-                if filters["filters"][filter]["annotation"] == "VEP":
-                    data = annotation_extractor(variant, field)
-                elif filters["filters"][filter]["annotation"] == "FORMAT":
-                    if (
-                        type(variant.samples[0][field]) is tuple and
-                        "indexes" in filters["filters"][filter] and
-                        filters["filters"][filter]["indexes"][i] != ""
-                    ):
-                        data = variant.samples[0][field][filters["filters"][filter]["indexes"][i]]
-                    else:
-                        data = variant.samples[0][field]
-                if filters["filters"][filter]["test_operators"][i] == "<":
-                    if data == "":
-                        fail_filter_list.append(True)
-                    else:
-                        fail_filter_list.append(float(data) < float(filters["filters"][filter]["tests"][i]))
-                elif filters["filters"][filter]["test_operators"][i] == ">":
-                    if data == "":
-                        fail_filter_list.append(True)
-                    else:
-                        fail_filter_list.append(float(data) > float(filters["filters"][filter]["tests"][i]))
-                elif filters["filters"][filter]["test_operators"][i] == "=":
-                    if is_float(data):
-                        fail_filter_list.append(float(data) == float(filters["filters"][filter]["tests"][i]))
-                    else:
-                        fail_filter_list.append(data == filters["filters"][filter]["tests"][i])
-                elif filters["filters"][filter]["test_operators"][i] == "!=":
-                    if is_float(data):
-                        fail_filter_list.append(float(data) != float(filters["filters"][filter]["tests"][i]))
-                    else:
-                        fail_filter_list.append(data != filters["filters"][filter]["tests"][i])
-                i += 1
-            fail_filter = fail_filter_list[0]
-            if len(fail_filter_list) > 1:
-                if filters["filters"][filter]["logical_operator"] == "or":
-                    fail_filter = any(fail_filter_list)
-                elif filters["filters"][filter]["logical_operator"] == "and":
-                    fail_filter = all(fail_filter_list)
-            if fail_filter:
-                variant.filter.add(filters["filters"][filter]["filter_string"])
-        vcf_out.write(variant)
+        hard_filter = False
+        i = 0
+        for vcf_filter in vcf_filters:
+            if vcf_filter(variant):
+                if soft_filters[i][1]:
+                    variant.filter.add(filters["filters"][soft_filters[i][0]]["soft_filter_flag"])
+                else:
+                    hard_filter = True
+            i += 1
+        if not hard_filter:
+            vcf_out.write(variant)
+
     vcf_out.close()

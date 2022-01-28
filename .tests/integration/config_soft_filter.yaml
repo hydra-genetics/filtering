@@ -1,4 +1,16 @@
 filters:
   gene:
-    decription: "Valida gene"
+    description: "Filter the SAMD11 gene"
     expression: "VEP:SYMBOL = SAMD11"
+    soft_filter_flag: "SAMD11"
+    soft_filter: "True"
+  ad:
+    description: "Filter low AD"
+    expression: "FORMAT:AD:1 < 60"
+    soft_filter_flag: "AD60"
+    soft_filter: "True"
+  germline:
+    description: "Germline"
+    expression: "(VEP:AF < 0.01 and VEP:CLIN_SIG = )"
+    soft_filter_flag: "Germline"
+    soft_filter: "False"
