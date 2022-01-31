@@ -21,7 +21,6 @@ def _and_function(v1, v2): return v1 and v2
 def _or_function(v1, v2): return v1 or v2
 
 
-
 def _parse_helper(f_iterator):
     """
     function used to parse a string with parantes and create a nested fail_filter_list
@@ -226,7 +225,6 @@ def create_convert_expression_function(annotation_extractors):
     return convert_to_expression
 
 
-
 # ToDo Move to tools ? and maybe check correct sample?
 def extract_format_data(variant, field):
     return variant.samples[0][field]
@@ -294,7 +292,7 @@ if __name__ == "__main__":
         vcf_filters.append(create_variant_filter(value['expression'], expression_converter))
         if "soft_filter" in filters["filters"][filter]:
             soft_filters.append([filter, filters["filters"][filter]["soft_filter"] != "False"])
-        else :
+        else:
             soft_filters.append([filter, True])
     for variant in variants:
         hard_filter = False
