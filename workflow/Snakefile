@@ -7,13 +7,13 @@ __email__ = "jonas.almlof@igp.uu.se"
 __license__ = "GPL-3"
 
 
-include: "rules/common.smk"
-include: "rules/filter_vcf_on_format.smk"
+include: "rules/add_multi_snv_in_codon.smk"
 include: "rules/artifact_filter.smk"
 include: "rules/background_filter.smk"
-include: "rules/add_multi_snv_in_codon.smk"
-include: "rules/sort_vcf.smk"
 include: "rules/bgzip_vcf.smk"
+include: "rules/common.smk"
+include: "rules/filter_vcf_on_format.smk"
+include: "rules/sort_vcf.smk"
 include: "rules/tabix_vcf.smk"
 
 

@@ -37,7 +37,7 @@ new_header.info.add(
     "Artifact",
     "1",
     "String",
-    "Number of observations of SNV or INDEL in panel samples per caller and total observations: %s|Total" % "|".join(caller_list)
+    "Number of observations of SNV or INDEL in panel samples per caller and fianlly panel size: %s,Total" % ",".join(caller_list)
 )
 out_vcf = VariantFile(out_vcf_filename, 'w', header=new_header)
 out_vcf.close()
@@ -83,8 +83,8 @@ for line in in_vcf:
     Artifact_string = "Artifact=" + Observations[0]
     if len(Observations) > 1:
         for obs in Observations[1:]:
-            Artifact_string += "|" + obs
-        Artifact_string += "|" + str(max_nr_observations)
+            Artifact_string += "," + obs
+        Artifact_string += "," + str(max_nr_observations)
     INFO = Artifact_string + ";" + INFO
     lline[7] = INFO
     out_vcf.write(lline[0])
