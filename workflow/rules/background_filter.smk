@@ -16,10 +16,10 @@ rule background_filter:
     params:
         nr_min_sd=config.get("background_filter", {}).get("nr_min_sd", 5),
     log:
-        "filtering/background_filter/{sample}_{type}.log",
+        "filtering/background_filter/{sample}_{type}.background_filter.vcf.log",
     benchmark:
         repeat(
-            "filtering/background_filter/{sample}_{type}.benchmark.tsv",
+            "filtering/background_filter/{sample}_{type}.background_filter.vcf.benchmark.tsv",
             config.get("background_filter", {}).get("benchmark_repeats", 1),
         )
     threads: config.get("background_filter", {}).get("threads", config["default_resources"]["threads"])

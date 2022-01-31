@@ -14,10 +14,10 @@ rule artifact_filter:
     output:
         vcf=temp("filtering/artifact_filter/{sample}_{type}.artifact_filter.vcf"),
     log:
-        "filtering/artifact_filter/{sample}_{type}.log",
+        "filtering/artifact_filter/{sample}_{type}.artifact_filter.vcf.log",
     benchmark:
         repeat(
-            "filtering/artifact_filter/{sample}_{type}.benchmark.tsv",
+            "filtering/artifact_filter/{sample}_{type}.artifact_filter.vcf.benchmark.tsv",
             config.get("artifact_filter", {}).get("benchmark_repeats", 1),
         )
     threads: config.get("artifact_filter", {}).get("threads", config["default_resources"]["threads"])
