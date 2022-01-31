@@ -15,8 +15,11 @@ def is_float(element) -> bool:
         return False
 
 
-_and_function = lambda v1, v2: v1 and v2
-_or_function = lambda v1, v2: v1 or v2
+def _and_function(v1, v2): return v1 and v2
+
+
+def _or_function(v1, v2): return v1 or v2
+
 
 
 def _parse_helper(f_iterator):
@@ -221,6 +224,7 @@ def create_convert_expression_function(annotation_extractors):
             raise Exception("Could not find comparison field in: " + expression)
 
     return convert_to_expression
+
 
 
 # ToDo Move to tools ? and maybe check correct sample?

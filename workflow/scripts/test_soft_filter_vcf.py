@@ -13,6 +13,7 @@ from soft_filter_vcf import _or_function
 from soft_filter_vcf import create_convert_expression_function
 from soft_filter_vcf import extract_format_data
 
+
 class TestUnitUtils(unittest.TestCase):
     def setUp(self):
         pass
@@ -24,8 +25,9 @@ class TestUnitUtils(unittest.TestCase):
         """
         function used to convert filter string into a function that can evaluate objects
         """
-        true_fun = lambda variant: True
-        false_fun = lambda variant: False
+        def true_fun(variant): return True
+        def false_fun(variant): return False
+
         def process_string(data):
             """
             dummy function used to parse filter strings
@@ -37,7 +39,6 @@ class TestUnitUtils(unittest.TestCase):
                 return false_fun
             else:
                 raise Exception("Unhandled filter substring: {}!".format(data))
-
 
         test1 = "(true or false) and (true and true)"
         data, _ = _parse_helper(iter(test1))
@@ -61,12 +62,12 @@ class TestUnitUtils(unittest.TestCase):
 
     def test_create_convert_expression(self):
         test_table = {
-                        "chr1:934486-934487": True, # SAMD11
-                        "chr1:935221-935222": True, # SAMD11
-                        "chr1:935338-935339": True, # SAMD11
-                        "chr1:2460943-2460947": False, # PLCH2
-                        "chr1:2460960-2460961": False, # PLCH2
-                        "chr1:2461206-2461207": False # PLCH2
+                        "chr1:934486-934487": True,  # SAMD11
+                        "chr1:935221-935222": True,  # SAMD11
+                        "chr1:935338-935339": True,  # SAMD11
+                        "chr1:2460943-2460947": False,  # PLCH2
+                        "chr1:2460960-2460961": False,  # PLCH2
+                        "chr1:2461206-2461207": False  # PLCH2
                       }
 
         variants = VariantFile(".tests/integration/snv_indels/ensemble_vcf/HD832.HES45_T.ensembled.vep_annotated.vcf.gz")
@@ -83,24 +84,23 @@ class TestUnitUtils(unittest.TestCase):
             filters = yaml.load(file, Loader=yaml.FullLoader)
         vcf_filters = []
         for filter, value in filters["filters"].items():
-            #data, _ = _parse_helper(iter(value['expression']))
-            #vcf_filters.append(_convert_string(data, expression_converter))
             vcf_filters.append(create_variant_filter(value['expression'], expression_converter))
         for variant in variants:
             for vcf_filter in vcf_filters:
                 try:
-                    self.assertEqual(test_table["{}:{}-{}".format(variant.chrom, variant.start, variant.stop)], vcf_filter(variant))
+                    self.assertEqual(test_table["{}:{}-{}".format(variant.chrom, variant.start, variant.stop)],
+                                     vcf_filter(variant))
                 except AssertionError as e:
                     print("Failed validation gene: " + str(variant))
                     raise e
 
         test_table = {
-                        "chr1:934486-934487": False, # SAMD11
-                        "chr1:935221-935222": False, # SAMD11
-                        "chr1:935338-935339": False, # SAMD11
-                        "chr1:2460943-2460947": False, # PLCH2 -
-                        "chr1:2460960-2460961": True, # PLCH2 T
-                        "chr1:2461206-2461207": False # PLCH2 A
+                        "chr1:934486-934487": False,  # SAMD11
+                        "chr1:935221-935222": False,  # SAMD11
+                        "chr1:935338-935339": False,  # SAMD11
+                        "chr1:2460943-2460947": False,  # PLCH2 -
+                        "chr1:2460960-2460961": True,  # PLCH2 T
+                        "chr1:2461206-2461207": False  # PLCH2 A
                       }
         filters = {"filters": []}
         with open(".tests/integration/config_soft_filter_2.yaml") as file:
@@ -114,18 +114,19 @@ class TestUnitUtils(unittest.TestCase):
         for variant in variants:
             for vcf_filter in vcf_filters:
                 try:
-                    self.assertEqual(test_table["{}:{}-{}".format(variant.chrom, variant.start, variant.stop)], vcf_filter(variant))
+                    self.assertEqual(test_table["{}:{}-{}".format(variant.chrom, variant.start, variant.stop)],
+                                     vcf_filter(variant))
                 except AssertionError as e:
                     print("Failed validation gene: " + str(variant))
                     raise e
 
         test_table = {
-                        "chr1:934486-934487": False, # SAMD11
-                        "chr1:935221-935222": False, # SAMD11
-                        "chr1:935338-935339": False, # SAMD11
-                        "chr1:2460943-2460947": False, # PLCH2 -
-                        "chr1:2460960-2460961": True, # PLCH2 T
-                        "chr1:2461206-2461207": True # PLCH2 A
+                        "chr1:934486-934487": False,  # SAMD11
+                        "chr1:935221-935222": False,  # SAMD11
+                        "chr1:935338-935339": False,  # SAMD11
+                        "chr1:2460943-2460947": False,  # PLCH2 -
+                        "chr1:2460960-2460961": True,  # PLCH2 T
+                        "chr1:2461206-2461207": True  # PLCH2 A
                       }
         filters = {"filters": []}
         with open(".tests/integration/config_soft_filter_3.yaml") as file:
@@ -139,18 +140,19 @@ class TestUnitUtils(unittest.TestCase):
         for variant in variants:
             for vcf_filter in vcf_filters:
                 try:
-                    self.assertEqual(test_table["{}:{}-{}".format(variant.chrom, variant.start, variant.stop)], vcf_filter(variant))
+                    self.assertEqual(test_table["{}:{}-{}".format(variant.chrom, variant.start, variant.stop)],
+                                     vcf_filter(variant))
                 except AssertionError as e:
                     print("Failed validation gene: " + str(variant))
                     raise e
 
         test_table = {
-                        "chr1:934486-934487": True, # 1108,595
-                        "chr1:935221-935222": True, # 936,910
-                        "chr1:935338-935339": False, # 1301,127
-                        "chr1:2460943-2460947": False, # 278,9
-                        "chr1:2460960-2460961": False, # 314,5
-                        "chr1:2461206-2461207": False # 657,59
+                        "chr1:934486-934487": True,  # 1108,595
+                        "chr1:935221-935222": True,  # 936,910
+                        "chr1:935338-935339": False,  # 1301,127
+                        "chr1:2460943-2460947": False,  # 278,9
+                        "chr1:2460960-2460961": False,  # 314,5
+                        "chr1:2461206-2461207": False  # 657,59
                       }
         filters = {"filters": []}
         with open(".tests/integration/config_soft_filter_4.yaml") as file:
@@ -164,18 +166,19 @@ class TestUnitUtils(unittest.TestCase):
         for variant in variants:
             for vcf_filter in vcf_filters:
                 try:
-                    self.assertEqual(test_table["{}:{}-{}".format(variant.chrom, variant.start, variant.stop)], vcf_filter(variant))
+                    self.assertEqual(test_table["{}:{}-{}".format(variant.chrom, variant.start, variant.stop)],
+                                     vcf_filter(variant))
                 except AssertionError as e:
                     print("Failed validation gene: " + str(variant))
                     raise e
 
         test_table = {
-                        "chr1:934486-934487": False, # SAMD11 1108,595
-                        "chr1:935221-935222": False, # SAMD11 936,910
-                        "chr1:935338-935339": False, # SAMD11 1301,127
-                        "chr1:2460943-2460947": False, # PLCH2 278,9
-                        "chr1:2460960-2460961": False, # PLCH2 314,5
-                        "chr1:2461206-2461207": True # PLCH2 657,59
+                        "chr1:934486-934487": False,  # SAMD11 1108,595
+                        "chr1:935221-935222": False,  # SAMD11 936,910
+                        "chr1:935338-935339": False,  # SAMD11 1301,127
+                        "chr1:2460943-2460947": False,  # PLCH2 278,9
+                        "chr1:2460960-2460961": False,  # PLCH2 314,5
+                        "chr1:2461206-2461207": True  # PLCH2 657,59
                       }
         filters = {"filters": []}
         with open(".tests/integration/config_soft_filter_5.yaml") as file:
@@ -189,7 +192,8 @@ class TestUnitUtils(unittest.TestCase):
         for variant in variants:
             for vcf_filter in vcf_filters:
                 try:
-                    self.assertEqual(test_table["{}:{}-{}".format(variant.chrom, variant.start, variant.stop)], vcf_filter(variant))
+                    self.assertEqual(test_table["{}:{}-{}".format(variant.chrom, variant.start, variant.stop)],
+                                     vcf_filter(variant))
                 except AssertionError as e:
                     print("Failed validation gene: " + str(variant))
                     raise e
