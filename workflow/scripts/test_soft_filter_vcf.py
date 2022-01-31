@@ -1,5 +1,7 @@
 import unittest
+import os
 import pytest
+import tempfile
 import yaml
 
 from hydra_genetics.utils.io import utils
@@ -12,11 +14,12 @@ from soft_filter_vcf import _and_function
 from soft_filter_vcf import _or_function
 from soft_filter_vcf import create_convert_expression_function
 from soft_filter_vcf import extract_format_data
+from soft_filter_vcf import soft_filter_variants
 
 
 class TestUnitUtils(unittest.TestCase):
     def setUp(self):
-        pass
+        self.in_vcf = ".tests/integration/snv_indels/ensemble_vcf/HD832.HES45_T.ensembled.vep_annotated.vcf.gz"
 
     def tearDown(self):
         pass
@@ -61,7 +64,7 @@ class TestUnitUtils(unittest.TestCase):
         self.assertEqual(variant_filter(""), False)
 
     def test_create_convert_expression(self):
-        variants = VariantFile(".tests/integration/snv_indels/ensemble_vcf/HD832.HES45_T.ensembled.vep_annotated.vcf.gz")
+        variants = VariantFile(self.in_vcf)
         annotation_extractor = {}
         for record in variants.header.records:
             if record.type == "INFO":
@@ -100,7 +103,7 @@ class TestUnitUtils(unittest.TestCase):
                       }
 
         test_filters(test_table,
-                     VariantFile(".tests/integration/snv_indels/ensemble_vcf/HD832.HES45_T.ensembled.vep_annotated.vcf.gz"),
+                     VariantFile(self.in_vcf),
                      creater_filter(".tests/integration/config_soft_filter_unittest_1.yaml"))
         test_table = {
                         "chr1:934486-934487": False,  # SAMD11
@@ -112,7 +115,7 @@ class TestUnitUtils(unittest.TestCase):
                       }
 
         test_filters(test_table,
-                     VariantFile(".tests/integration/snv_indels/ensemble_vcf/HD832.HES45_T.ensembled.vep_annotated.vcf.gz"),
+                     VariantFile(self.in_vcf),
                      creater_filter(".tests/integration/config_soft_filter_unittest_2.yaml"))
 
         test_table = {
@@ -125,7 +128,7 @@ class TestUnitUtils(unittest.TestCase):
                       }
 
         test_filters(test_table,
-                     VariantFile(".tests/integration/snv_indels/ensemble_vcf/HD832.HES45_T.ensembled.vep_annotated.vcf.gz"),
+                     VariantFile(self.in_vcf),
                      creater_filter(".tests/integration/config_soft_filter_unittest_3.yaml"))
 
         test_table = {
@@ -138,7 +141,7 @@ class TestUnitUtils(unittest.TestCase):
                       }
 
         test_filters(test_table,
-                     VariantFile(".tests/integration/snv_indels/ensemble_vcf/HD832.HES45_T.ensembled.vep_annotated.vcf.gz"),
+                     VariantFile(self.in_vcf),
                      creater_filter(".tests/integration/config_soft_filter_unittest_4.yaml"))
 
         test_table = {
@@ -151,5 +154,50 @@ class TestUnitUtils(unittest.TestCase):
                       }
 
         test_filters(test_table,
-                     VariantFile(".tests/integration/snv_indels/ensemble_vcf/HD832.HES45_T.ensembled.vep_annotated.vcf.gz"),
+                     VariantFile(self.in_vcf),
                      creater_filter(".tests/integration/config_soft_filter_unittest_5.yaml"))
+
+    def test_soft_and_hard_filtering(self):
+        tempdir = tempfile.mkdtemp()
+        vcf = os.path.join(tempdir, "test.vcf")
+        with open(vcf, 'w', encoding="ascii") as out_vcf:
+            soft_filter_variants(self.in_vcf, out_vcf, ".tests/integration/config_soft_filter_unittest_6.yaml")
+        with VariantFile(vcf) as variants:
+            test_table = {
+                            "chr1:934486-934487": "SAMD11",  # SAMD11 1108,595
+                            "chr1:935221-935222": "SAMD11",  # SAMD11 936,910
+                            "chr1:935338-935339": "SAMD11",  # SAMD11 1301,127
+                            "chr1:2460943-2460947": "AD50",  # PLCH2 278,9
+                            "chr1:2460960-2460961": "AD50",  # PLCH2 314,5
+                            "chr1:2461206-2461207": "PASS"  # PLCH2 657,59
+                          }
+            counter = 0
+            for variant in variants:
+                try:
+                    counter += 1
+                    self.assertEqual(test_table["{}:{}-{}".format(variant.chrom, variant.start, variant.stop)],
+                                     ",".join([f for f in variant.filter]))
+                except AssertionError as e:
+                    print("Failed validation gene: " + str(variant))
+                    raise e
+            self.assertEqual(counter, 6)
+
+        with open(vcf, 'w', encoding="ascii") as out_vcf:
+            soft_filter_variants(self.in_vcf, out_vcf, ".tests/integration/config_soft_filter_unittest_7.yaml")
+        with VariantFile(vcf) as variants:
+            test_table = {
+                            "chr1:934486-934487": "SAMD11",  # SAMD11 1108,595
+                            "chr1:935221-935222": "SAMD11",  # SAMD11 936,910
+                            "chr1:935338-935339": "SAMD11",  # SAMD11 1301,127
+                            "chr1:2461206-2461207": "PASS"  # PLCH2 657,59
+                          }
+            counter = 0
+            for variant in variants:
+                try:
+                    counter += 1
+                    self.assertEqual(test_table["{}:{}-{}".format(variant.chrom, variant.start, variant.stop)],
+                                     ",".join([f for f in variant.filter]))
+                except AssertionError as e:
+                    print("Failed validation gene: " + str(variant))
+                    raise # -*- coding: utf-8 -*-
+            self.assertEqual(counter, 4)

@@ -230,7 +230,7 @@ def extract_format_data(variant, field):
     return variant.samples[0][field]
 
 
-def check_yaml_file(filters):
+def check_yaml_file(variants, filters):
     for filter in filters["filters"]:
         if "expression" not in filters["filters"][filter]:
             raise Exception("No expression entry for %s" % filter)
@@ -252,11 +252,7 @@ def check_yaml_file(filters):
         variants.header.filters.add(filters["filters"][filter]["soft_filter_flag"], None, None, filter_text)
 
 
-if __name__ == "__main__":
-    in_vcf = snakemake.input.vcf
-    out_vcf = snakemake.output.vcf
-    filter_yaml_file = snakemake.params.filter_config
-
+def soft_filter_variants(in_vcf, out_vcf, filter_yaml_file):
     variants = VariantFile(in_vcf)
     log = logging.getLogger()
 
@@ -268,7 +264,7 @@ if __name__ == "__main__":
             filters = yaml.load(file, Loader=yaml.FullLoader)
 
     log.info("Checking yaml file parameters")
-    check_yaml_file(filters)
+    check_yaml_file(variants, filters)
 
     log.info("Process vcf header: {}".format(in_vcf))
     annotation_extractor = {}
@@ -308,3 +304,11 @@ if __name__ == "__main__":
             vcf_out.write(variant)
 
     vcf_out.close()
+
+
+if __name__ == "__main__":
+    in_vcf = snakemake.input.vcf
+    out_vcf = snakemake.output.vcf
+    filter_yaml_file = snakemake.params.filter_config
+
+    soft_filter_variants(in_vcf, out_vcf, filter_yaml_file)
