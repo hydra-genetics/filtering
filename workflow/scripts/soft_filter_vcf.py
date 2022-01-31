@@ -172,55 +172,71 @@ def create_convert_expression_function(annotation_extractors):
             "=": lambda value1, value2: value1 == value2,
             "!=": lambda value1, value2: value1 != value2
         }
-        data = re.split("[ ]([<>=!]+)[ ]", expression)
-        if len(data) != 3:
-            raise Exception("Invalid expression: " + expression)
         regex_string = "[ ]*(VEP|FORMAT|INFO):([A-Za-z0-9_.]+):*([0-9]*)"
-
-        if "VEP:" in data[0] or "FORMAT:" in data[0] or "INFO:" in data[0]:
-            source, field, index = re.search(regex_string, data[0]).groups()
-            if len(index) == 0:
-                index = None
+        if "exist[" in expression:
+            exist_statment, regex_exist, field = re.search(r"([!]{0,1}exist)\[(.+),[ ]*(.+)\]", expression).groups()
+            source, field, index = re.search(regex_string, field).groups()
+            if len(index) > 0:
+                def get_value(variant):
+                    value = annotation_extractors[source](variant, field)[int(index)]
+                    return value if value is not None else ""
             else:
-                index = int(index)
-            try:
-                data[2] = data[2].rstrip(" ").lstrip(" ")
-                value2 = float(data[2])
-                return lambda variant: compare_data(
-                                                        comparison[data[1]],
-                                                        annotation_extractors[source](variant, field),
-                                                        value2, index1=index
-                                                    )
-            except ValueError:
-                return lambda variant: compare_data(
-                                                        comparison[data[1]],
-                                                        annotation_extractors[source](variant, field),
-                                                        data[2], index1=index
-                                                    )
-        elif "VEP:" in data[2] or "FORMAT:" in data[2] or "INFO:" in data[2]:
-            source, field, index = re.search(regex_string, data[2]).groups()
-            if len(index) == 0:
-                index = None
+                def get_value(variant):
+                    value = annotation_extractors[source](variant, field)
+                    return value if value is not None else ""
+            if exist_statment == "!exist":
+                return lambda variant: re.match(regex_exist, get_value(variant)) is None
             else:
-                index = int(index)
-            try:
-                data[0] = data[0].rstrip(" ").lstrip(" ")
-                value1 = float(data[0])
-                return lambda variant: compare_data(
-                                                        comparison[data[1]],
-                                                        value1,
-                                                        annotation_extractors[source](variant, field),
-                                                        index2=index
-                                                    )
-            except ValueError:
-                return lambda variant: compare_data(
-                                                        comparison[data[1]],
-                                                        data[0],
-                                                        annotation_extractors[source](variant, field),
-                                                        index2=index
-                                                    )
+                return lambda variant: re.match(regex_exist, get_value(variant)) is not None
         else:
-            raise Exception("Could not find comparison field in: " + expression)
+            data = re.split("[ ]([<>=!]+)[ ]", expression)
+            if len(data) != 3:
+                raise Exception("Invalid expression: " + expression)
+
+            if "VEP:" in data[0] or "FORMAT:" in data[0] or "INFO:" in data[0]:
+                source, field, index = re.search(regex_string, data[0]).groups()
+                if len(index) == 0:
+                    index = None
+                else:
+                    index = int(index)
+                try:
+                    data[2] = data[2].rstrip(" ").lstrip(" ")
+                    value2 = float(data[2])
+                    return lambda variant: compare_data(
+                                                            comparison[data[1]],
+                                                            annotation_extractors[source](variant, field),
+                                                            value2, index1=index
+                                                        )
+                except ValueError:
+                    return lambda variant: compare_data(
+                                                            comparison[data[1]],
+                                                            annotation_extractors[source](variant, field),
+                                                            data[2], index1=index
+                                                        )
+            elif "VEP:" in data[2] or "FORMAT:" in data[2] or "INFO:" in data[2]:
+                source, field, index = re.search(regex_string, data[2]).groups()
+                if len(index) == 0:
+                    index = None
+                else:
+                    index = int(index)
+                try:
+                    data[0] = data[0].rstrip(" ").lstrip(" ")
+                    value1 = float(data[0])
+                    return lambda variant: compare_data(
+                                                            comparison[data[1]],
+                                                            value1,
+                                                            annotation_extractors[source](variant, field),
+                                                            index2=index
+                                                        )
+                except ValueError:
+                    return lambda variant: compare_data(
+                                                            comparison[data[1]],
+                                                            data[0],
+                                                            annotation_extractors[source](variant, field),
+                                                            index2=index
+                                                        )
+            else:
+                raise Exception("Could not find comparison field in: " + expression)
 
     return convert_to_expression
 
@@ -228,6 +244,15 @@ def create_convert_expression_function(annotation_extractors):
 # ToDo Move to tools ? and maybe check correct sample?
 def extract_format_data(variant, field):
     return variant.samples[0][field]
+
+
+def extract_info_data(variant, field):
+    data = variant.info[field]
+    if data is None:
+        return "-"
+    elif isinstance(data, tuple):
+        return ",".join(map(str, data))
+    return data
 
 
 def check_yaml_file(variants, filters):

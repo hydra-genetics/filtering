@@ -14,6 +14,7 @@ from soft_filter_vcf import _and_function
 from soft_filter_vcf import _or_function
 from soft_filter_vcf import create_convert_expression_function
 from soft_filter_vcf import extract_format_data
+from soft_filter_vcf import extract_info_data
 from soft_filter_vcf import soft_filter_variants
 
 
@@ -72,6 +73,7 @@ class TestUnitUtils(unittest.TestCase):
                     vep_fields = {v: c for c, v in enumerate(record['Description'].split("Format: ")[1].split("|"))}
                     annotation_extractor["VEP"] = utils.get_annoation_data_vep(vep_fields)
         annotation_extractor['FORMAT'] = extract_format_data
+        annotation_extractor['INFO'] = extract_info_data
         expression_converter = create_convert_expression_function(annotation_extractor)
 
         def creater_filter(yaml_file):
@@ -157,6 +159,45 @@ class TestUnitUtils(unittest.TestCase):
                      VariantFile(self.in_vcf),
                      creater_filter(".tests/integration/config_soft_filter_unittest_5.yaml"))
 
+        test_table = {
+                        "chr1:934486-934487": False,  # -
+                        "chr1:935221-935222": False,  # -
+                        "chr1:935338-935339": False,  # -
+                        "chr1:2460943-2460947": True,  # XM_017002872
+                        "chr1:2460960-2460961": True,  # XM_017002872
+                        "chr1:2461206-2461207": True  # XM_017002872
+                      }
+
+        test_filters(test_table,
+                     VariantFile(self.in_vcf),
+                     creater_filter(".tests/integration/config_soft_filter_unittest_8.yaml"))
+
+        test_table = {
+                        "chr1:934486-934487": True,  # -
+                        "chr1:935221-935222": True,  # -
+                        "chr1:935338-935339": True,  # -
+                        "chr1:2460943-2460947": False,  # XM_017002872
+                        "chr1:2460960-2460961": False,  # XM_017002872
+                        "chr1:2461206-2461207": False  # XM_017002872
+                      }
+
+        test_filters(test_table,
+                     VariantFile(self.in_vcf),
+                     creater_filter(".tests/integration/config_soft_filter_unittest_9.yaml"))
+
+        test_table = {
+                        "chr1:934486-934487": False,  # -
+                        "chr1:935221-935222": False,  # -
+                        "chr1:935338-935339": False,  # -
+                        "chr1:2460943-2460947": False,  # XM_017002872
+                        "chr1:2460960-2460961": False,  # XM_017002872 mutect2
+                        "chr1:2461206-2461207": True  # XM_017002872
+                      }
+
+        test_filters(test_table,
+                     VariantFile(self.in_vcf),
+                     creater_filter(".tests/integration/config_soft_filter_unittest_10.yaml"))
+
     def test_soft_and_hard_filtering(self):
         tempdir = tempfile.mkdtemp()
         vcf = os.path.join(tempdir, "test.vcf")
@@ -199,5 +240,5 @@ class TestUnitUtils(unittest.TestCase):
                                      ",".join([f for f in variant.filter]))
                 except AssertionError as e:
                     print("Failed validation gene: " + str(variant))
-                    raise # -*- coding: utf-8 -*-
+                    raise
             self.assertEqual(counter, 4)
