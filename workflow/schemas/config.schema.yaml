@@ -12,6 +12,7 @@ properties:
   default_container:
     type: string
     description: name or path to a default docker/singularity container
+
   required:
     - samples
     - units
