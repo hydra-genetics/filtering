@@ -37,7 +37,7 @@ new_header.info.add(
     "Artifact",
     "1",
     "String",
-    "Number of observations of SNV or INDEL in panel samples per caller and fianlly panel size: %s,Total" % ",".join(caller_list)
+    "Number of observations of SNV or INDEL in panel samples per caller and finally panel size: %s,Total" % ",".join(caller_list)
 )
 out_vcf = VariantFile(out_vcf_filename, 'w', header=new_header)
 out_vcf.close()
