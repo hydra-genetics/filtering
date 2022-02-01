@@ -44,7 +44,9 @@ wildcard_constraints:
     sample="|".join(samples.index),
     unit="N|T|R",
 
+
 ruleorder: sort_vcf > bgzip_vcf
+
 
 def compile_output_list(wildcards):
     output_files = [

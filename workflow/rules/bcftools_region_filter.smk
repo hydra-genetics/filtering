@@ -7,12 +7,6 @@ __email__ = "jonas.almlof@scilifelab.uu.se"
 __license__ = "GPL-3"
 
 
-def get_include_bed_file(wildcards):
-    return "-R %s" % config["bcftools_region_include_filter"][wildcards.tag]
-
-def get_exclude_bed_file(wildcards):
-    return "-T ^%s" % config["bcftools_region_exclude_filter"][wildcards.tag]
-
 rule bcftools_region_include_filter:
     input:
         vcf="{file}.vcf.gz",
@@ -20,7 +14,7 @@ rule bcftools_region_include_filter:
     output:
         vcf=temp("{file}.include.{tag}.vcf.gz"),
     params:
-        filter=get_include_bed_file,
+        filter=lambda wildcards: "-R %s" % config["bcftools_region_include_filter"][wildcards.tag],
         extra=config.get("bcftools_region_include_filter", {}).get("extra", ""),
     log:
         "{file}.include.{tag}.log",
@@ -55,7 +49,7 @@ rule bcftools_region_exclude_filter:
     output:
         vcf=temp("{file}.exclude.{tag}.vcf.gz"),
     params:
-        filter=get_exclude_bed_file,
+        filter=lambda wildcards: "-T ^%s" % config["bcftools_region_exclude_filter"][wildcards.tag],
         extra=config.get("bcftools_region_exclude_filter", {}).get("extra", ""),
     log:
         "{file}.exclude.{tag}.log",
