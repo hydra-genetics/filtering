@@ -14,7 +14,7 @@ rule add_multi_snv_in_codon:
     output:
         vcf=temp("filtering/add_multi_snv_in_codon/{sample}_{type}.codon_snvs.vcf"),
     params:
-        use_filter=config.get("add_multi_snv_in_codon", {}).get("use_filter", "True"),
+        use_filter=config.get("add_multi_snv_in_codon", {}).get("use_filter", True),
     log:
         "filtering/add_multi_snv_in_codon/{sample}_{type}.log",
     benchmark:

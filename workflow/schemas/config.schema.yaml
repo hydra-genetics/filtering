@@ -44,8 +44,8 @@ properties:
         type: string
         description: name or path to docker/singularity container
       use_filter:
-        type: string
-        description: When 'True' only those position with filter 'PASS' are considered
+        type: bool
+        description: When True only those position with filter 'PASS' are considered
 
   artifact_filter:
     type: object
