@@ -12,6 +12,7 @@ properties:
   default_container:
     type: string
     description: name or path to a default docker/singularity container
+
   required:
     - samples
     - units
@@ -19,7 +20,7 @@ properties:
     - default_container
 
   reference:
-    fasta: 
+    fasta:
       type: string
       description: file with reference fasta file
     artifacts:
@@ -33,22 +34,18 @@ properties:
       - artifacts
       - background
 
-
-  filter_vcf_on_format:
+  add_multi_snv_in_codon:
     type: object
     properties:
       benchmark_repeats:
         type: integer
-        description: set number of times benchmark should be repeated for filter_vcf_on_format
+        description: set number of times benchmark should be repeated for add_multi_snv_in_codon
       container:
         type: string
         description: name or path to docker/singularity container
-      filter:
+      use_filter:
         type: string
-        description: filtering parameters to filter_vcf_on_format
-      extra:
-        type: string
-        description: extra parameters to filter_vcf_on_format
+        description: When 'True' only those position with filter 'PASS' are considered
 
   artifact_filter:
     type: object
@@ -73,18 +70,31 @@ properties:
         type: integer
         description: number of standard deviations from median to not get a filter flag
 
-  add_multi_snv_in_codon:
+  bgzip_vcf:
     type: object
     properties:
       benchmark_repeats:
         type: integer
-        description: set number of times benchmark should be repeated for add_multi_snv_in_codon
+        description: set number of times benchmark should be repeated for bgzip_vcf
       container:
         type: string
         description: name or path to docker/singularity container
-      use_filter:
+
+  filter_vcf_on_format:
+    type: object
+    properties:
+      benchmark_repeats:
+        type: integer
+        description: set number of times benchmark should be repeated for filter_vcf_on_format
+      container:
         type: string
-        description: When 'True' only those position with filter 'PASS' are considered
+        description: name or path to docker/singularity container
+      filter:
+        type: string
+        description: filtering parameters to filter_vcf_on_format
+      extra:
+        type: string
+        description: extra parameters to filter_vcf_on_format
 
   sort_vcf:
     type: object
@@ -92,16 +102,6 @@ properties:
       benchmark_repeats:
         type: integer
         description: set number of times benchmark should be repeated for sort_vcf
-      container:
-        type: string
-        description: name or path to docker/singularity container
-
-  bgzip_vcf:
-    type: object
-    properties:
-      benchmark_repeats:
-        type: integer
-        description: set number of times benchmark should be repeated for bgzip_vcf
       container:
         type: string
         description: name or path to docker/singularity container
