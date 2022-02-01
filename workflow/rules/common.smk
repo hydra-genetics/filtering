@@ -44,10 +44,22 @@ wildcard_constraints:
     sample="|".join(samples.index),
     unit="N|T|R",
 
+ruleorder: sort_vcf > bgzip_vcf
 
 def compile_output_list(wildcards):
-    return [
+    output_files = [
         "filtering/add_multi_snv_in_codon/%s_%s.codon_snvs.sorted.vcf.gz" % (sample, t)
         for sample in get_samples(samples)
         for t in get_unit_types(units, sample)
     ]
+    output_files.append(
+        "filtering/add_multi_snv_in_codon/%s_%s.codon_snvs.sorted.include.noexon1.vcf.gz" % (sample, t)
+        for sample in get_samples(samples)
+        for t in get_unit_types(units, sample)
+    )
+    output_files.append(
+        "filtering/add_multi_snv_in_codon/%s_%s.codon_snvs.sorted.exclude.noexon1.vcf.gz" % (sample, t)
+        for sample in get_samples(samples)
+        for t in get_unit_types(units, sample)
+    )
+    return output_files
