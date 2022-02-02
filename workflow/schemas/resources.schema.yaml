@@ -23,45 +23,7 @@ properties:
   required:
     - default_resources
 
-  bcftools_filter_exclude_region:
-    type: object
-    properties:
-      threads:
-        type: integer
-        description: number of threads that will be used by 'bcftools_filter_exclude_region'
-      time:
-        type: string
-        description: max execution time for 'bcftools_filter_exclude_region'
-      mem_mb:
-        type: integer
-        description: memory used for 'bcftools_filter_exclude_region'
-      mem_per_cpu:
-        type: integer
-        description: memory used per cpu for 'bcftools_filter_exclude_region'
-      partition:
-        type: string
-        description: partition to use on the cluster for 'bcftools_filter_exclude_region'
-
-  bcftools_filter_include_region:
-    type: object
-    properties:
-      threads:
-        type: integer
-        description: number of threads that will be used by 'bcftools_filter_include_region'
-      time:
-        type: string
-        description: max execution time for 'bcftools_filter_include_region'
-      mem_mb:
-        type: integer
-        description: memory used for 'bcftools_filter_include_region'
-      mem_per_cpu:
-        type: integer
-        description: memory used per cpu for 'bcftools_filter_include_region'
-      partition:
-        type: string
-        description: partition to use on the cluster for 'bcftools_filter_include_region'
-
-  filter_vcf_on_format:
+  add_multi_snv_in_codon:
     type: object
     properties:
       threads:
@@ -117,6 +79,44 @@ properties:
       partition:
         type: string
         description: partition to use on the cluster for 'background_filter'
+
+  bcftools_filter_exclude_region:
+    type: object
+    properties:
+      threads:
+        type: integer
+        description: number of threads that will be used by 'bcftools_filter_exclude_region'
+      time:
+        type: string
+        description: max execution time for 'bcftools_filter_exclude_region'
+      mem_mb:
+        type: integer
+        description: memory used for 'bcftools_filter_exclude_region'
+      mem_per_cpu:
+        type: integer
+        description: memory used per cpu for 'bcftools_filter_exclude_region'
+      partition:
+        type: string
+        description: partition to use on the cluster for 'bcftools_filter_exclude_region'
+
+  bcftools_filter_include_region:
+    type: object
+    properties:
+      threads:
+        type: integer
+        description: number of threads that will be used by 'bcftools_filter_include_region'
+      time:
+        type: string
+        description: max execution time for 'bcftools_filter_include_region'
+      mem_mb:
+        type: integer
+        description: memory used for 'bcftools_filter_include_region'
+      mem_per_cpu:
+        type: integer
+        description: memory used per cpu for 'bcftools_filter_include_region'
+      partition:
+        type: string
+        description: partition to use on the cluster for 'bcftools_filter_include_region'
 
   bgzip_vcf:
     type: object
