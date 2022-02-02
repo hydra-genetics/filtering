@@ -10,8 +10,8 @@ reference:
   background: "reference/background_panel_HES45.tsv"
   design_bed: "reference/twist_DNA_solid.HES45.annotated.bed"
 
-bcftools_region_include_filter:
+bcftools_filter_include_region:
   noexon1: "reference/twist_DNA_solid.HES45.annotated.noexon1.bed"
 
-bcftools_region_exclude_filter:
+bcftools_filter_exclude_region::
   noexon1: "reference/twist_DNA_solid.HES45.annotated.noexon1.bed"
