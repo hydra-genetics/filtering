@@ -20,28 +20,27 @@ properties:
       partition:
         type: string
         description: default partition to use on the cluser for a rule
-
   required:
     - default_resources
 
-  filter_vcf_on_format:
+  add_multi_snv_in_codon:
     type: object
     properties:
       threads:
         type: integer
-        description: number of threads that will be used by 'filter_vcf_on_format'
+        description: number of threads that will be used by 'add_multi_snv_in_codon'
       time:
         type: string
-        description: max execution time for 'filter_vcf_on_format'
+        description: max execution time for 'add_multi_snv_in_codon'
       mem_mb:
         type: integer
-        description: memory used for 'filter_vcf_on_format'
+        description: memory used for 'add_multi_snv_in_codon'
       mem_per_cpu:
         type: integer
-        description: memory used per cpu for 'filter_vcf_on_format'
+        description: memory used per cpu for 'add_multi_snv_in_codon'
       partition:
         type: string
-        description: partition to use on the cluster for 'filter_vcf_on_format'
+        description: partition to use on the cluster for 'add_multi_snv_in_codon'
 
   artifact_filter:
     type: object
@@ -81,24 +80,43 @@ properties:
         type: string
         description: partition to use on the cluster for 'background_filter'
 
-  add_multi_snv_in_codon:
+  bgzip_vcf:
     type: object
     properties:
       threads:
         type: integer
-        description: number of threads that will be used by 'add_multi_snv_in_codon'
+        description: number of threads that will be used by 'bgzip_vcf'
       time:
         type: string
-        description: max execution time for 'add_multi_snv_in_codon'
+        description: max execution time for 'bgzip_vcf'
       mem_mb:
         type: integer
-        description: memory used for 'add_multi_snv_in_codon'
+        description: memory used for 'bgzip_vcf'
       mem_per_cpu:
         type: integer
-        description: memory used per cpu for 'add_multi_snv_in_codon'
+        description: memory used per cpu for 'bgzip_vcf'
       partition:
         type: string
-        description: partition to use on the cluster for 'add_multi_snv_in_codon'
+        description: partition to use on the cluster for 'bgzip_vcf'
+
+  filter_vcf_on_format:
+    type: object
+    properties:
+      threads:
+        type: integer
+        description: number of threads that will be used by 'filter_vcf_on_format'
+      time:
+        type: string
+        description: max execution time for 'filter_vcf_on_format'
+      mem_mb:
+        type: integer
+        description: memory used for 'filter_vcf_on_format'
+      mem_per_cpu:
+        type: integer
+        description: memory used per cpu for 'filter_vcf_on_format'
+      partition:
+        type: string
+        description: partition to use on the cluster for 'filter_vcf_on_format'
 
   sort_vcf:
     type: object
@@ -118,25 +136,6 @@ properties:
       partition:
         type: string
         description: partition to use on the cluster for 'sort_vcf'
-
-  bgzip_vcf:
-    type: object
-    properties:
-      threads:
-        type: integer
-        description: number of threads that will be used by 'bgzip_vcf'
-      time:
-        type: string
-        description: max execution time for 'bgzip_vcf'
-      mem_mb:
-        type: integer
-        description: memory used for 'bgzip_vcf'
-      mem_per_cpu:
-        type: integer
-        description: memory used per cpu for 'bgzip_vcf'
-      partition:
-        type: string
-        description: partition to use on the cluster for 'bgzip_vcf'
 
   tabix_vcf:
     type: object
