@@ -49,14 +49,17 @@ ruleorder: sort_vcf > bgzip_vcf
 
 
 def compile_output_list(wildcards):
+    files = {
+        "filtering/add_multi_snv_in_codon": [
+            "codon_snvs.sorted.include.noexon1.vcf.gz",
+            "codon_snvs.sorted.exclude.noexon1.vcf.gz",
+        ],
+    }
     output_files = [
-        "filtering/add_multi_snv_in_codon/%s_%s.codon_snvs.sorted.include.noexon1.vcf.gz" % (sample, t)
+        "%s/%s_%s%s" % (prefix, sample, unit_type, suffix)
+        for prefix in files.keys()
         for sample in get_samples(samples)
-        for t in get_unit_types(units, sample)
+        for unit_type in get_unit_types(units, sample)
+        for suffix in files[prefix]
     ]
-    output_files.append(
-        "filtering/add_multi_snv_in_codon/%s_%s.codon_snvs.sorted.exclude.noexon1.vcf.gz" % (sample, t)
-        for sample in get_samples(samples)
-        for t in get_unit_types(units, sample)
-    )
     return output_files
