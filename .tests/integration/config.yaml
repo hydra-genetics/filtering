@@ -13,5 +13,5 @@ reference:
 bcftools_filter_include_region:
   noexon1: "reference/twist_DNA_solid.HES45.annotated.noexon1.bed"
 
-bcftools_filter_exclude_region::
+bcftools_filter_exclude_region:
   noexon1: "reference/twist_DNA_solid.HES45.annotated.noexon1.bed"
