@@ -70,7 +70,7 @@ rule bcftools_filter_exclude_region:
     container:
         config.get("bcftools_filter_exclude_region", {}).get("container", config["default_container"])
     conda:
-        "../envs/bcftools_region_filter.yaml"
+        "../envs/bcftools.yaml"
     message:
         "{rule}: Use bedtools to exclude variants in vcf overlapping bed: {wildcards.file}.exclude.{wildcards.tag}.vcf"
     wrapper:
