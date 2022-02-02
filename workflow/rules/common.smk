@@ -51,8 +51,8 @@ ruleorder: sort_vcf > bgzip_vcf
 def compile_output_list(wildcards):
     files = {
         "filtering/add_multi_snv_in_codon": [
-            "codon_snvs.sorted.include.noexon1.vcf.gz",
-            "codon_snvs.sorted.exclude.noexon1.vcf.gz",
+            ".codon_snvs.sorted.include.noexon1.vcf.gz",
+            ".codon_snvs.sorted.exclude.noexon1.vcf.gz",
         ],
     }
     output_files = [
