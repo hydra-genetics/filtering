@@ -16,6 +16,6 @@ filters:
     soft_filter: "True"
   artifact:
     description: "Artifact"
-    expression: "(INFO:artifact:0 > 0 or INFO:artifact:1 > 0)"
+    expression: "(INFO:Artifact:0 > 0 or INFO:Artifact:1 > 0)"
     soft_filter_flag: "Artifact"
     soft_filter: "True"
