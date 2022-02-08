@@ -182,6 +182,8 @@ def create_convert_expression_function(annotation_extractors):
             else:
                 def get_value(variant):
                     value = annotation_extractors[source](variant, field)
+                    if isinstance(value, tuple):
+                        value = ",".join(value)
                     return value if value is not None else ""
             if exist_statment == "!exist":
                 return lambda variant: re.match(regex_exist, get_value(variant)) is None
