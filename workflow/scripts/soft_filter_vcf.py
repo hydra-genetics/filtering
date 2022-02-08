@@ -135,8 +135,7 @@ def create_variant_filter(filter, string_parser):
 
 def create_convert_expression_function(annotation_extractors):
     """
-
-    :param annotation_extractors: dict with functions that can extract annotatiors
+    :param annotation_extractors: dict with functions that can extract annotations
     :type annotation_extractors: dict
     """
     def compare_data(comparison, value1, value2, index1=None, index2=None):
