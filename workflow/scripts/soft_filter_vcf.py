@@ -240,18 +240,19 @@ def create_convert_expression_function(annotation_extractors):
     return convert_to_expression
 
 
-# ToDo Move to tools ? and maybe check correct sample?
-def extract_format_data(variant, field):
-    return variant.samples[0][field]
-
-
-def extract_info_data(variant, field):
-    data = variant.info[field]
-    if data is None:
-        return "-"
-    elif isinstance(data, tuple):
-        return ",".join(map(str, data))
-    return data
+# # ToDo Move to tools ? and maybe check correct sample?
+# def extract_format_data(variant, field):
+#     data = None
+#     if field in variant.samples[0]:
+#         data = variant.samples[0][field]
+#     return data
+#
+#
+# def extract_info_data(variant, field):
+#     data = None
+#     if field in variant.info:
+#         data = variant.info[field]
+#     return data
 
 
 def check_yaml_file(variants, filters):
@@ -298,12 +299,13 @@ def soft_filter_variants(in_vcf, out_vcf, filter_yaml_file):
                 log.info(" -- found vep information: {}".format(in_vcf))
                 log.debug(" -- -- {}".format(record['Description'].split("Format: ")[1].split("|")))
                 vep_fields = {v: c for c, v in enumerate(record['Description'].split("Format: ")[1].split("|"))}
-                annotation_extractor["VEP"] = utils.get_annoation_data_vep(vep_fields)
+                annotation_extractor["VEP"] = utils.get_annotation_data_vep(vep_fields)
 
     vcf_out = VariantFile(out_vcf, 'w', header=variants.header)
 
     log.info("Process variants")
-    annotation_extractor['FORMAT'] = extract_format_data
+    annotation_extractor['FORMAT'] = utils.get_annotation_data_format
+    annotation_extractor['INFO'] = utils.get_annotation_data_info
     expression_converter = create_convert_expression_function(annotation_extractor)
 
     vcf_filters = []

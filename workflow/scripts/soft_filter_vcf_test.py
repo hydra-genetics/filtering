@@ -13,8 +13,6 @@ from soft_filter_vcf import _convert_string
 from soft_filter_vcf import _and_function
 from soft_filter_vcf import _or_function
 from soft_filter_vcf import create_convert_expression_function
-from soft_filter_vcf import extract_format_data
-from soft_filter_vcf import extract_info_data
 from soft_filter_vcf import soft_filter_variants
 
 
@@ -71,9 +69,9 @@ class TestUnitUtils(unittest.TestCase):
             if record.type == "INFO":
                 if record['ID'] == "CSQ":
                     vep_fields = {v: c for c, v in enumerate(record['Description'].split("Format: ")[1].split("|"))}
-                    annotation_extractor["VEP"] = utils.get_annoation_data_vep(vep_fields)
-        annotation_extractor['FORMAT'] = extract_format_data
-        annotation_extractor['INFO'] = extract_info_data
+                    annotation_extractor["VEP"] = utils.get_annotation_data_vep(vep_fields)
+        annotation_extractor['FORMAT'] =  utils.get_annotation_data_format
+        annotation_extractor['INFO'] =  utils.get_annotation_data_info
         expression_converter = create_convert_expression_function(annotation_extractor)
 
         def creater_filter(yaml_file):
