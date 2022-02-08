@@ -7,10 +7,15 @@ filters:
   ad:
     description: "Filter low AD"
     expression: "FORMAT:AD:1 < 60"
-    soft_filter_flag: "AD60"
+    soft_filter_flag: "AD<60"
     soft_filter: "True"
   germline:
     description: "Germline"
-    expression: "(VEP:AF < 0.01 and VEP:CLIN_SIG = )"
+    expression: "(VEP:AF > 0.01 and !exist[COSV_[0-9]+, VEP:Existing_variation])"
     soft_filter_flag: "Germline"
-    soft_filter: "False"
+    soft_filter: "True"
+  artifact:
+    description: "Artifact"
+    expression: "(INFO:artifact:0 > 0 or INFO:artifact:1 > 0)"
+    soft_filter_flag: "Artifact"
+    soft_filter: "True"
