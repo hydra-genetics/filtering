@@ -140,16 +140,33 @@ def create_convert_expression_function(annotation_extractors):
     :param annotation_extractors: dict with functions that can extract annotations
     :type annotation_extractors: dict
     """
-    def compare_data(comparison, value1, value2, index1=None, index2=None):
+
+    def na_handling_helper(na_handling, expression):
+        if na_handling == "NA_TRUE":
+            return True
+        elif na_handling == "NA_FALSE":
+            return False
+        elif na_handling == "NA_ERROR":
+            raise ValueError("Couldn't evaluate {} due to missing value".format(expression))
+
+    def regex_compare(regex_exist, value, na_handling="NA_FALSE", expression=""):
+        if value is regex_exist:
+            return na_handling_helper(na_handling, expression)
+        if "!exist" in expression:
+            return re.match(regex_exist, value) is None
+        else:
+            return re.match(regex_exist, value) is not None
+
+    def compare_data(comparison, value1, value2, index1=None, index2=None, na_handling="NA_FALSE", expression=""):
         if isinstance(value1, float):
-            if value2 == "" or value2 is None:
-                return False
+            if value2 is None:
+                return na_handling_helper(na_handling, expression)
             if index2 is not None:
                 value2 = value2[index2]
             return comparison(value1, float(value2))
         elif isinstance(value2, float):
-            if value1 == "" or value1 is None:
-                return False
+            if value1 is None:
+                return na_handling_helper(na_handling, expression)
             if index1 is not None:
                 value1 = value1[index1]
             return comparison(float(value1), value2)
@@ -157,12 +174,39 @@ def create_convert_expression_function(annotation_extractors):
             if index2 is not None:
                 value2 = value2[index2]
             if index1 is not None:
-                value1 = value2[index1]
+                value1 = value1[index1]
+            if value1 == '-' and value2 is None:
+                value2 = '-'
+            if value2 == '-' and value1 is None:
+                value1 = '-'
+            if value1 is None or value2 is None:
+                return na_handling_helper(na_handling, expression)
             return comparison(value1, value2)
 
     def convert_to_expression(expression):
         """
-        :params expression: VEP:AF
+        Valid format of expression is:
+        - DATA_SOURCE:NA_HANLDING(OPTIONAL):FIELD:COLUMN(OPTIONAL) [<|>|=|!=] VALUE
+        - VALUE [<|>|=|!=] DATA_SOURCE:NA_HANLDING(OPTIONAL):FIELD:COLUMN(OPTIONAL)
+        - exist[regex, DATA_SOURCE:NA_HANLDING(OPTIONAL):FIELD:COLUMN]
+        - !exist[regex, DATA_SOURCE:NA_HANLDING(OPTIONAL):FIELD:COLUMN]
+
+        DATA_SOURCE:
+         - VEP
+         - FORMAT
+         - INFO
+
+        NA_HANLDING:
+         - NA_TRUE: when None is found the exression will return True
+         - NA_FALSE: when None is found the exression will return False
+         - NA_ERROR: when None is found the an error will be raised
+        Default will be NA_PASS, i.e a filter will not remove variant
+
+        FIELD, any field in info, format or vep string
+
+        COLUMN, used to extract value from tuple
+
+        :params expression
         :type expression: string
         """
         comparison = {
@@ -171,25 +215,36 @@ def create_convert_expression_function(annotation_extractors):
             "=": lambda value1, value2: value1 == value2,
             "!=": lambda value1, value2: value1 != value2
         }
+
+        # Extract information about how None values should be handled during filtering
+        regex_na_handling = r"(VEP|FORMAT|INFO):(NA_TRUE|NA_FALSE|NA_ERROR):"
+        na_handling = re.search(regex_na_handling, expression)
+        if na_handling:
+            na_handling = na_handling.groups()[1]
+            # Remove NA handling information from expression
+            expression = re.sub(r"(NA_TRUE|NA_FALSE|NA_ERROR):", '', expression)
+        else:
+            na_handling = "NA_FALSE"
         regex_string = "[ ]*(VEP|FORMAT|INFO):([A-Za-z0-9_.]+):*([0-9]*)"
+
         if "exist[" in expression:
+            # Handle exist expression
+            # Example "exist[XM_[0-9]+, VEP:Feature]"
             exist_statment, regex_exist, field = re.search(r"([!]{0,1}exist)\[(.+),[ ]*(.+)\]", expression).groups()
             source, field, index = re.search(regex_string, field).groups()
             if len(index) > 0:
                 def get_value(variant):
-                    value = annotation_extractors[source](variant, field)[int(index)]
-                    return value if value is not None else ""
+                    return annotation_extractors[source](variant, field)[int(index)]
             else:
                 def get_value(variant):
                     value = annotation_extractors[source](variant, field)
                     if isinstance(value, tuple):
                         value = ",".join(value)
-                    return value if value is not None else ""
-            if exist_statment == "!exist":
-                return lambda variant: re.match(regex_exist, get_value(variant)) is None
-            else:
-                return lambda variant: re.match(regex_exist, get_value(variant)) is not None
+                    return value
+            return lambda variant: regex_compare(regex_exist, get_value(variant), na_handling, expression)
         else:
+            # Handle comparison expression
+            # Example "FORMAT:NA_TRUE:SB_mutect2:1 > 400"
             data = re.split("[ ]([<>=!]+)[ ]", expression)
             if len(data) != 3:
                 raise Exception("Invalid expression: " + expression)
@@ -206,13 +261,15 @@ def create_convert_expression_function(annotation_extractors):
                     return lambda variant: compare_data(
                                                             comparison[data[1]],
                                                             annotation_extractors[source](variant, field),
-                                                            value2, index1=index
+                                                            value2, index1=index, na_handling=na_handling,
+                                                            expression=expression
                                                         )
                 except ValueError:
                     return lambda variant: compare_data(
                                                             comparison[data[1]],
                                                             annotation_extractors[source](variant, field),
-                                                            data[2], index1=index
+                                                            data[2], index1=index, na_handling=na_handling,
+                                                            expression=expression
                                                         )
             elif "VEP:" in data[2] or "FORMAT:" in data[2] or "INFO:" in data[2]:
                 source, field, index = re.search(regex_string, data[2]).groups()
@@ -227,34 +284,21 @@ def create_convert_expression_function(annotation_extractors):
                                                             comparison[data[1]],
                                                             value1,
                                                             annotation_extractors[source](variant, field),
-                                                            index2=index
+                                                            index2=index, na_handling=na_handling,
+                                                            expression=expression
                                                         )
                 except ValueError:
                     return lambda variant: compare_data(
                                                             comparison[data[1]],
                                                             data[0],
                                                             annotation_extractors[source](variant, field),
-                                                            index2=index
+                                                            index2=index, na_handling=na_handling,
+                                                            expression=expression
                                                         )
             else:
                 raise Exception("Could not find comparison field in: " + expression)
 
     return convert_to_expression
-
-
-# # ToDo Move to tools ? and maybe check correct sample?
-# def extract_format_data(variant, field):
-#     data = None
-#     if field in variant.samples[0]:
-#         data = variant.samples[0][field]
-#     return data
-#
-#
-# def extract_info_data(variant, field):
-#     data = None
-#     if field in variant.info:
-#         data = variant.info[field]
-#     return data
 
 
 def check_yaml_file(variants, filters):
