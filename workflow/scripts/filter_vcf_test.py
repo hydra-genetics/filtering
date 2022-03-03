@@ -7,13 +7,14 @@ import yaml
 from hydra_genetics.utils.io import utils
 from pysam import VariantFile
 
-from soft_filter_vcf import create_variant_filter
-from soft_filter_vcf import _parse_helper
-from soft_filter_vcf import _convert_string
-from soft_filter_vcf import _and_function
-from soft_filter_vcf import _or_function
-from soft_filter_vcf import create_convert_expression_function
-from soft_filter_vcf import soft_filter_variants
+from filter_vcf import create_variant_filter
+from filter_vcf import _parse_helper
+from filter_vcf import _convert_string
+from filter_vcf import _and_function
+from filter_vcf import _or_function
+from filter_vcf import create_convert_expression_function
+from filter_vcf import filter_variants
+
 
 def creater_filter(yaml_file, expression_converter):
     filters = {"filters": []}
@@ -89,8 +90,8 @@ class TestUnitUtils(unittest.TestCase):
                 if record['ID'] == "CSQ":
                     vep_fields = {v: c for c, v in enumerate(record['Description'].split("Format: ")[1].split("|"))}
                     annotation_extractor["VEP"] = utils.get_annotation_data_vep(vep_fields)
-        annotation_extractor['FORMAT'] =  utils.get_annotation_data_format
-        annotation_extractor['INFO'] =  utils.get_annotation_data_info
+        annotation_extractor['FORMAT'] = utils.get_annotation_data_format
+        annotation_extractor['INFO'] = utils.get_annotation_data_info
         expression_converter = create_convert_expression_function(annotation_extractor)
 
         test_table = {
@@ -104,7 +105,8 @@ class TestUnitUtils(unittest.TestCase):
 
         self._test_filters(test_table,
                            VariantFile(self.in_vcf),
-                           creater_filter(".tests/integration/config_filter_vep_expression_unittest_1.yaml", expression_converter))
+                           creater_filter(".tests/integration/config_filter_vep_expression_unittest_1.yaml",
+                                          expression_converter))
         test_table = {
                         "chr1:934486-934487": False,  # SAMD11
                         "chr1:935221-935222": False,  # SAMD11
@@ -116,7 +118,8 @@ class TestUnitUtils(unittest.TestCase):
 
         self._test_filters(test_table,
                            VariantFile(self.in_vcf),
-                           creater_filter(".tests/integration/config_filter_vep_expression_unittest_2.yaml", expression_converter))
+                           creater_filter(".tests/integration/config_filter_vep_expression_unittest_2.yaml",
+                                          expression_converter))
 
         test_table = {
                         "chr1:934486-934487": False,  # SAMD11
@@ -129,7 +132,8 @@ class TestUnitUtils(unittest.TestCase):
 
         self._test_filters(test_table,
                            VariantFile(self.in_vcf),
-                           creater_filter(".tests/integration/config_filter_vep_expression_unittest_3.yaml", expression_converter))
+                           creater_filter(".tests/integration/config_filter_vep_expression_unittest_3.yaml",
+                                          expression_converter))
 
         test_table = {
                         "chr1:934486-934487": True,  # 1108,595
@@ -142,7 +146,8 @@ class TestUnitUtils(unittest.TestCase):
 
         self._test_filters(test_table,
                            VariantFile(self.in_vcf),
-                           creater_filter(".tests/integration/config_filter_format_expression_unittest_1.yaml", expression_converter))
+                           creater_filter(".tests/integration/config_filter_format_expression_unittest_1.yaml",
+                                          expression_converter))
 
         test_table = {
                         "chr1:934486-934487": False,  # SAMD11 1108,595
@@ -155,7 +160,8 @@ class TestUnitUtils(unittest.TestCase):
 
         self._test_filters(test_table,
                            VariantFile(self.in_vcf),
-                           creater_filter(".tests/integration/config_filter_format_and_vep_expresion_unittest_1.yaml", expression_converter))
+                           creater_filter(".tests/integration/config_filter_format_and_vep_expresion_unittest_1.yaml",
+                                          expression_converter))
 
         test_table = {
                         "chr1:934486-934487": False,  # -
@@ -168,7 +174,8 @@ class TestUnitUtils(unittest.TestCase):
 
         self._test_filters(test_table,
                            VariantFile(self.in_vcf),
-                           creater_filter(".tests/integration/config_filter_vep_existexpression_unittest_1.yaml", expression_converter))
+                           creater_filter(".tests/integration/config_filter_vep_existexpression_unittest_1.yaml",
+                                          expression_converter))
 
         test_table = {
                         "chr1:934486-934487": True,  # -
@@ -181,7 +188,8 @@ class TestUnitUtils(unittest.TestCase):
 
         self._test_filters(test_table,
                            VariantFile(self.in_vcf),
-                           creater_filter(".tests/integration/config_filter_vep_existexpression_unittest_2.yaml", expression_converter))
+                           creater_filter(".tests/integration/config_filter_vep_existexpression_unittest_2.yaml",
+                                          expression_converter))
 
         test_table = {
                         "chr1:934486-934487": False,  # -
@@ -194,14 +202,14 @@ class TestUnitUtils(unittest.TestCase):
 
         self._test_filters(test_table,
                            VariantFile(self.in_vcf),
-                           creater_filter(".tests/integration/config_filter_vep_existexpression_unittest_3.yaml", expression_converter))
-
+                           creater_filter(".tests/integration/config_filter_vep_existexpression_unittest_3.yaml",  # noqa
+                                          expression_converter))
 
     def test_soft_and_hard_filtering(self):
         tempdir = tempfile.mkdtemp()
         vcf = os.path.join(tempdir, "test.vcf")
         with open(vcf, 'w', encoding="ascii") as out_vcf:
-            soft_filter_variants(self.in_vcf, out_vcf, ".tests/integration/config_filter_format_and_vep_hard_and_soft_unittest_1.yaml")
+            filter_variants(self.in_vcf, out_vcf, ".tests/integration/config_filter_format_and_vep_hard_and_soft_unittest_1.yaml")
         with VariantFile(vcf) as variants:
             test_table = {
                             "chr1:934486-934487": "SAMD11",  # SAMD11 1108,595 0.34
@@ -223,7 +231,7 @@ class TestUnitUtils(unittest.TestCase):
             self.assertEqual(counter, 6)
 
         with open(vcf, 'w', encoding="ascii") as out_vcf:
-            soft_filter_variants(self.in_vcf, out_vcf, ".tests/integration/config_filter_format_and_vep_hard_and_soft_unittest_2.yaml")
+            filter_variants(self.in_vcf, out_vcf, ".tests/integration/config_filter_format_and_vep_hard_and_soft_unittest_2.yaml")
         with VariantFile(vcf) as variants:
             test_table = {
                             "chr1:934486-934487": "SAMD11",  # SAMD11 1108,595
@@ -242,12 +250,11 @@ class TestUnitUtils(unittest.TestCase):
                     raise
             self.assertEqual(counter, 4)
 
-
     def test_handle_missing_data(self):
         tempdir = tempfile.mkdtemp()
         vcf = os.path.join(tempdir, "test.vcf")
         with open(vcf, 'w', encoding="ascii") as out_vcf:
-            soft_filter_variants(self.in_vcf, out_vcf, ".tests/integration/config_filter_format_missing_value_unittest_1.yaml")
+            filter_variants(self.in_vcf, out_vcf, ".tests/integration/config_filter_format_missing_value_unittest_1.yaml")
         with VariantFile(vcf) as variants:
             test_table = {
                             "chr1:934486-934487": "SB_mutect2",
@@ -269,7 +276,7 @@ class TestUnitUtils(unittest.TestCase):
             self.assertEqual(counter, 6)
 
         with open(vcf, 'w', encoding="ascii") as out_vcf:
-            soft_filter_variants(self.in_vcf, out_vcf, ".tests/integration/config_filter_format_missing_value_unittest_2.yaml")
+            filter_variants(self.in_vcf, out_vcf, ".tests/integration/config_filter_format_missing_value_unittest_2.yaml")
         with VariantFile(vcf) as variants:
             test_table = {
                             "chr1:934486-934487": "SB_mutect2",
@@ -291,4 +298,4 @@ class TestUnitUtils(unittest.TestCase):
             self.assertEqual(counter, 6)
 
         with self.assertRaises(ValueError):
-            soft_filter_variants(self.in_vcf, out_vcf, ".tests/integration/config_filter_format_missing_value_unittest_3.yaml")
+            filter_variants(self.in_vcf, out_vcf, ".tests/integration/config_filter_format_missing_value_unittest_3.yaml")

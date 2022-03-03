@@ -32,8 +32,8 @@ rule soft_filter_vcf:
     container:
         config.get("soft_filter_vcf", {}).get("container", config["default_container"])
     conda:
-        "../envs/soft_filter_vcf.yaml"
+        "../envs/filter_vcf.yaml"
     message:
         "{rule}: Filter vcf filtering/soft_filter_vcf/{wildcards.sample}_{wildcards.type} based on annotations"
     script:
-        "../scripts/soft_filter_vcf.py"
+        "../scripts/filter_vcf.py"

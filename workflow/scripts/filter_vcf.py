@@ -323,7 +323,7 @@ def check_yaml_file(variants, filters):
         variants.header.filters.add(filters["filters"][filter]["soft_filter_flag"], None, None, filter_text)
 
 
-def soft_filter_variants(in_vcf, out_vcf, filter_yaml_file):
+def filter_variants(in_vcf, out_vcf, filter_yaml_file):
     variants = VariantFile(in_vcf)
     log = logging.getLogger()
 
@@ -383,4 +383,4 @@ if __name__ == "__main__":
     out_vcf = snakemake.output.vcf
     filter_yaml_file = snakemake.params.filter_config
 
-    soft_filter_variants(in_vcf, out_vcf, filter_yaml_file)
+    filter_variants(in_vcf, out_vcf, filter_yaml_file)
