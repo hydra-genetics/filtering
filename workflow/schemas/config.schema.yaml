@@ -12,6 +12,7 @@ properties:
   default_container:
     type: string
     description: name or path to a default docker/singularity container
+
   required:
     - samples
     - units
@@ -19,7 +20,7 @@ properties:
     - default_container
 
   reference:
-    fasta: 
+    fasta:
       type: string
       description: file with reference fasta file
     artifacts:
@@ -33,22 +34,18 @@ properties:
       - artifacts
       - background
 
-
-  filter_vcf_on_format:
+  add_multi_snv_in_codon:
     type: object
     properties:
       benchmark_repeats:
         type: integer
-        description: set number of times benchmark should be repeated for filter_vcf_on_format
+        description: set number of times benchmark should be repeated for add_multi_snv_in_codon
       container:
         type: string
         description: name or path to docker/singularity container
-      filter:
-        type: string
-        description: filtering parameters to filter_vcf_on_format
-      extra:
-        type: string
-        description: extra parameters to filter_vcf_on_format
+      use_filter:
+        type: bool
+        description: When True only those position with filter 'PASS' are considered
 
   artifact_filter:
     type: object
@@ -73,28 +70,37 @@ properties:
         type: integer
         description: number of standard deviations from median to not get a filter flag
 
-  add_multi_snv_in_codon:
+  bcftools_filter_exclude_region:
     type: object
     properties:
       benchmark_repeats:
         type: integer
-        description: set number of times benchmark should be repeated for add_multi_snv_in_codon
+        description: set number of times benchmark should be repeated for bcftools_filter_exclude_region
       container:
         type: string
         description: name or path to docker/singularity container
-      use_filter:
+      filter:
         type: string
-        description: When 'True' only those position with filter 'PASS' are considered
+        description: Exclude variants in vcf file based on regions in bed file. INDELs are exluded based on start position.
+      extra:
+        type: string
+        description: extra parameters to bcftools_filter_exclude_region
 
-  sort_vcf:
+  bcftools_filter_include_region:
     type: object
     properties:
       benchmark_repeats:
         type: integer
-        description: set number of times benchmark should be repeated for sort_vcf
+        description: set number of times benchmark should be repeated for bcftools_filter_include_region
       container:
         type: string
         description: name or path to docker/singularity container
+      filter:
+        type: string
+        description: Include variants in vcf file based on regions in bed file. Overlapping regions lead to duplicated variants.
+      extra:
+        type: string
+        description: extra parameters to bcftools_filter_include_region
 
   bgzip_vcf:
     type: object
@@ -102,6 +108,32 @@ properties:
       benchmark_repeats:
         type: integer
         description: set number of times benchmark should be repeated for bgzip_vcf
+      container:
+        type: string
+        description: name or path to docker/singularity container
+
+  filter_vcf_on_format:
+    type: object
+    properties:
+      benchmark_repeats:
+        type: integer
+        description: set number of times benchmark should be repeated for filter_vcf_on_format
+      container:
+        type: string
+        description: name or path to docker/singularity container
+      filter:
+        type: string
+        description: filtering parameters to filter_vcf_on_format
+      extra:
+        type: string
+        description: extra parameters to filter_vcf_on_format
+
+  sort_vcf:
+    type: object
+    properties:
+      benchmark_repeats:
+        type: integer
+        description: set number of times benchmark should be repeated for sort_vcf
       container:
         type: string
         description: name or path to docker/singularity container

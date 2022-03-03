@@ -55,7 +55,7 @@ for line in in_vcf:
     if len(ref) > 1 or len(alt) > 1:
         continue
     FILTER = lline[6]
-    if use_filter == "True":
+    if use_filter:
         if FILTER != "PASS":
             continue
     INFO = lline[7]
