@@ -112,21 +112,31 @@ properties:
         type: string
         description: name or path to docker/singularity container
 
-  filter_vcf_on_format:
+  hard_filter:
     type: object
     properties:
       benchmark_repeats:
         type: integer
-        description: set number of times benchmark should be repeated for filter_vcf_on_format
+        description: set number of times benchmark should be repeated for hard_filter
       container:
         type: string
         description: name or path to docker/singularity container
-      filter:
+      filter_config:
         type: string
-        description: filtering parameters to filter_vcf_on_format
-      extra:
+        description: Config file specifying which hard filters should be applied.
+
+  soft_filter:
+    type: object
+    properties:
+      benchmark_repeats:
+        type: integer
+        description: set number of times benchmark should be repeated for soft_filter
+      container:
         type: string
-        description: extra parameters to filter_vcf_on_format
+        description: name or path to docker/singularity container
+      filter_config:
+        type: string
+        description: Config file specifying which soft filters should be applied.
 
   sort_vcf:
     type: object

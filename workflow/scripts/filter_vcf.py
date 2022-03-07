@@ -149,9 +149,9 @@ def create_convert_expression_function(annotation_extractors):
         elif na_handling == "NA_ERROR":
             raise ValueError("Couldn't evaluate {} due to missing value".format(expression))
 
-    def regex_compare(regex_exist, value, na_handling="NA_FALSE", expression=""):
-        if value is regex_exist:
-            return na_handling_helper(na_handling, expression)
+    def regex_compare(regex_exist, value, expression=""):
+        if value is None:
+            value = ""
         if "!exist" in expression:
             return re.match(regex_exist, value) is None
         else:
@@ -241,7 +241,7 @@ def create_convert_expression_function(annotation_extractors):
                     if isinstance(value, tuple):
                         value = ",".join(value)
                     return value
-            return lambda variant: regex_compare(regex_exist, get_value(variant), na_handling, expression)
+            return lambda variant: regex_compare(regex_exist, get_value(variant), expression)
         else:
             # Handle comparison expression
             # Example "FORMAT:NA_TRUE:SB_mutect2:1 > 400"
@@ -320,7 +320,8 @@ def check_yaml_file(variants, filters):
             filter_text = "Failed %s filter (hard filtered)" % filter
         else:
             filter_text = "%s %s" % (filters["filters"][filter]["description"], "(hard filtered)")
-        variants.header.filters.add(filters["filters"][filter]["soft_filter_flag"], None, None, filter_text)
+        if "soft_filter_flag" in filters["filters"][filter] :
+            variants.header.filters.add(filters["filters"][filter]["soft_filter_flag"], None, None, filter_text)
 
 
 def filter_variants(in_vcf, out_vcf, filter_yaml_file):

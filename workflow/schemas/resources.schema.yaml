@@ -137,24 +137,43 @@ properties:
         type: string
         description: partition to use on the cluster for 'bgzip_vcf'
 
-  filter_vcf_on_format:
+  hard_filter_vcf:
     type: object
     properties:
       threads:
         type: integer
-        description: number of threads that will be used by 'filter_vcf_on_format'
+        description: number of threads that will be used by 'hard_filter_vcf'
       time:
         type: string
-        description: max execution time for 'filter_vcf_on_format'
+        description: max execution time for 'hard_filter_vcf'
       mem_mb:
         type: integer
-        description: memory used for 'filter_vcf_on_format'
+        description: memory used for 'hard_filter_vcf'
       mem_per_cpu:
         type: integer
-        description: memory used per cpu for 'filter_vcf_on_format'
+        description: memory used per cpu for 'hard_filter_vcf'
       partition:
         type: string
-        description: partition to use on the cluster for 'filter_vcf_on_format'
+        description: partition to use on the cluster for 'hard_filter_vcf'
+
+  soft_filter_vcf:
+    type: object
+    properties:
+      threads:
+        type: integer
+        description: number of threads that will be used by 'soft_filter_vcf'
+      time:
+        type: string
+        description: max execution time for 'soft_filter_vcf'
+      mem_mb:
+        type: integer
+        description: memory used for 'soft_filter_vcf'
+      mem_per_cpu:
+        type: integer
+        description: memory used per cpu for 'soft_filter_vcf'
+      partition:
+        type: string
+        description: partition to use on the cluster for 'soft_filter_vcf'
 
   sort_vcf:
     type: object

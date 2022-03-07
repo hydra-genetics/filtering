@@ -28,6 +28,10 @@ sort_vcf:
 artifact_filter:
   container: "docker://hydragenetics/common:0.0.1"
 
+hard_filter_vcf:
+  container: "docker://hydragenetics/common:0.0.1"
+  filter_config: "config_hard_filter.yaml"
+
 soft_filter_vcf:
   container: "docker://hydragenetics/common:0.0.1"
   filter_config: "config_soft_filter.yaml"
