@@ -320,7 +320,7 @@ def check_yaml_file(variants, filters):
             filter_text = "Failed %s filter (hard filtered)" % filter
         else:
             filter_text = "%s %s" % (filters["filters"][filter]["description"], "(hard filtered)")
-        if "soft_filter_flag" in filters["filters"][filter] :
+        if "soft_filter_flag" in filters["filters"][filter]:
             variants.header.filters.add(filters["filters"][filter]["soft_filter_flag"], None, None, filter_text)
 
 
