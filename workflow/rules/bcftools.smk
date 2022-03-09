@@ -38,8 +38,12 @@ rule bcftools_filter_include_region:
         "../envs/bcftools.yaml"
     message:
         "{rule}: Use bedtools to include variants in vcf overlapping bed: {wildcards.file}.include.{wildcards.tag}.vcf"
-    wrapper:
-        "v1.0.0/bio/bcftools/filter"
+    shell:
+        "(bcftools filter "
+        "{params.filter} "
+        "{params.extra} "
+        "{input.vcf} "
+        "-o {output.vcf}) &> {log}"
 
 
 rule bcftools_filter_exclude_region:
@@ -73,5 +77,9 @@ rule bcftools_filter_exclude_region:
         "../envs/bcftools.yaml"
     message:
         "{rule}: Use bedtools to exclude variants in vcf overlapping bed: {wildcards.file}.exclude.{wildcards.tag}.vcf"
-    wrapper:
-        "v1.0.0/bio/bcftools/filter"
+    shell:
+        "(bcftools filter "
+        "{params.filter} "
+        "{params.extra} "
+        "{input.vcf} "
+        "-o {output.vcf}) &> {log}"
