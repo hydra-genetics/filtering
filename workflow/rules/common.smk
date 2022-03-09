@@ -53,15 +53,13 @@ def compile_output_list(wildcards):
         "filtering/add_multi_snv_in_codon": [
             ".codon_snvs.sorted.include.noexon1.vcf.gz",
             ".codon_snvs.sorted.exclude.noexon1.vcf.gz",
-        ],
-        "filtering/add_multi_snv_in_codon": [
             ".codon_snvs.soft_filter.vcf",
             ".codon_snvs.hard_filter.vcf",
-        ],
+        ]
     }
     output_files = [
         "%s/%s_%s%s" % (prefix, sample, unit_type, suffix)
-        for prefix in files.keys()
+        for prefix in files
         for sample in get_samples(samples)
         for unit_type in get_unit_types(units, sample)
         for suffix in files[prefix]
