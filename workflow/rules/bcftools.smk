@@ -27,7 +27,6 @@ rule bcftools_filter_include_region:
     resources:
         threads=config.get("bcftools_filter_include_region", {}).get("threads", config["default_resources"]["threads"]),
         time=config.get("bcftools_filter_include_region", {}).get("time", config["default_resources"]["time"]),
-        mem_mb=config.get("bcftools_filter_include_region", {}).get("mem_mb", config["default_resources"]["mem_mb"]),
         mem_per_cpu=config.get("bcftools_filter_include_region", {}).get(
             "mem_per_cpu", config["default_resources"]["mem_per_cpu"]
         ),
@@ -62,7 +61,6 @@ rule bcftools_filter_exclude_region:
     resources:
         threads=config.get("bcftools_filter_exclude_region", {}).get("threads", config["default_resources"]["threads"]),
         time=config.get("bcftools_filter_exclude_region", {}).get("time", config["default_resources"]["time"]),
-        mem_mb=config.get("bcftools_filter_exclude_region", {}).get("mem_mb", config["default_resources"]["mem_mb"]),
         mem_per_cpu=config.get("bcftools_filter_exclude_region", {}).get(
             "mem_per_cpu", config["default_resources"]["mem_per_cpu"]
         ),
