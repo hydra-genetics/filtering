@@ -30,6 +30,6 @@ rule tabix_vcf:
     conda:
         "../envs/tabix_vcf.yaml"
     message:
-        "{rule}: Tabix index filtering/{wildcards.file}.vcf.gz"
+        "{rule}: tabix index filtering/{wildcards.file}.vcf.gz"
     wrapper:
         "0.79.0/bio/tabix"
