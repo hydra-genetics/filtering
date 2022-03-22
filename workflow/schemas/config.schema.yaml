@@ -66,16 +66,6 @@ properties:
         type: string
         description: extra parameters to bcftools_filter_include_region
 
-  bgzip_vcf:
-    type: object
-    properties:
-      benchmark_repeats:
-        type: integer
-        description: set number of times benchmark should be repeated for bgzip_vcf
-      container:
-        type: string
-        description: name or path to docker/singularity container
-
   hard_filter:
     type: object
     properties:
@@ -111,16 +101,3 @@ properties:
       container:
         type: string
         description: name or path to docker/singularity container
-
-  tabix_vcf:
-    type: object
-    properties:
-      benchmark_repeats:
-        type: integer
-        description: set number of times benchmark should be repeated for tabix_vcf
-      container:
-        type: string
-        description: name or path to docker/singularity container
-      extra:
-        type: string
-        description: extra parameters to tabix_vcf

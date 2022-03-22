@@ -9,9 +9,7 @@ __license__ = "GPL-3"
 
 include: "rules/common.smk"
 include: "rules/bcftools.smk"
-include: "rules/bgzip_vcf.smk"
 include: "rules/filter_vcf.smk"
-include: "rules/tabix_vcf.smk"
 
 
 report: "report/workflow.rst"
