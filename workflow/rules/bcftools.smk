@@ -76,7 +76,7 @@ rule bcftools_filter_exclude_region:
     conda:
         "../envs/bcftools.yaml"
     message:
-        "{rule}: Use bedtools to exclude variants in vcf overlapping bed: {wildcards.file}.exclude.{wildcards.tag}.vcf"
+        "{rule}: use bedtools to exclude variants in vcf overlapping bed: {wildcards.file}.exclude.{wildcards.tag}.vcf"
     shell:
         "(bcftools filter "
         "{params.filter} "

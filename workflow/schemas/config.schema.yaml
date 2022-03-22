@@ -34,42 +34,6 @@ properties:
       - artifacts
       - background
 
-  add_multi_snv_in_codon:
-    type: object
-    properties:
-      benchmark_repeats:
-        type: integer
-        description: set number of times benchmark should be repeated for add_multi_snv_in_codon
-      container:
-        type: string
-        description: name or path to docker/singularity container
-      use_filter:
-        type: bool
-        description: When True only those position with filter 'PASS' are considered
-
-  artifact_filter:
-    type: object
-    properties:
-      benchmark_repeats:
-        type: integer
-        description: set number of times benchmark should be repeated for artifact_filter
-      container:
-        type: string
-        description: name or path to docker/singularity container
-
-  background_filter:
-    type: object
-    properties:
-      benchmark_repeats:
-        type: integer
-        description: set number of times benchmark should be repeated for background_filter
-      container:
-        type: string
-        description: name or path to docker/singularity container
-      nr_min_sd:
-        type: integer
-        description: number of standard deviations from median to not get a filter flag
-
   bcftools_filter_exclude_region:
     type: object
     properties:
@@ -101,16 +65,6 @@ properties:
       extra:
         type: string
         description: extra parameters to bcftools_filter_include_region
-
-  bgzip_vcf:
-    type: object
-    properties:
-      benchmark_repeats:
-        type: integer
-        description: set number of times benchmark should be repeated for bgzip_vcf
-      container:
-        type: string
-        description: name or path to docker/singularity container
 
   hard_filter:
     type: object
@@ -147,16 +101,3 @@ properties:
       container:
         type: string
         description: name or path to docker/singularity container
-
-  tabix_vcf:
-    type: object
-    properties:
-      benchmark_repeats:
-        type: integer
-        description: set number of times benchmark should be repeated for tabix_vcf
-      container:
-        type: string
-        description: name or path to docker/singularity container
-      extra:
-        type: string
-        description: extra parameters to tabix_vcf

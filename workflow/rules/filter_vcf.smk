@@ -31,7 +31,7 @@ rule soft_filter_vcf:
     conda:
         "../envs/filter_vcf.yaml"
     message:
-        "{rule}: Soft filter vcf {wildcards.file} based on annotations"
+        "{rule}: soft filter vcf {wildcards.file} based on annotations"
     script:
         "../scripts/filter_vcf.py"
 
@@ -60,6 +60,6 @@ rule hard_filter_vcf:
     conda:
         "../envs/filter_vcf.yaml"
     message:
-        "{rule}: Hard filter vcf {wildcards.file} based on annotations"
+        "{rule}: hard filter vcf {wildcards.file} based on annotations"
     script:
         "../scripts/filter_vcf.py"

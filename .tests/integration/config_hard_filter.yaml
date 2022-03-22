@@ -13,5 +13,5 @@ filters:
     soft_filter: "False"
   artifacts:
     description: "Hard filter artifacts"
-    expression: "(INFO:Artifacts:0 > 0 or INFO:Artifacts:1 > 0)"
+    expression: "(INFO:Artifact:0 > 0 or INFO:Artifact:1 > 0)"
     soft_filter: "False"

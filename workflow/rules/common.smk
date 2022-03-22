@@ -45,16 +45,13 @@ wildcard_constraints:
     unit="N|T|R",
 
 
-ruleorder: sort_vcf > bgzip_vcf
-
-
 def compile_output_list(wildcards):
     files = {
-        "filtering/add_multi_snv_in_codon": [
-            ".codon_snvs.sorted.include.noexon1.vcf.gz",
-            ".codon_snvs.sorted.exclude.noexon1.vcf.gz",
-            ".codon_snvs.soft_filter.vcf",
-            ".codon_snvs.hard_filter.vcf",
+        "annotation/background_annotation": [
+            ".background_annotation.include.noexon1.vcf.gz",
+            ".background_annotation.exclude.noexon1.vcf.gz",
+            ".background_annotation.soft_filter.vcf",
+            ".background_annotation.hard_filter.vcf",
         ]
     }
     output_files = [

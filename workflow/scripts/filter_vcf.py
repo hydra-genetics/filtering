@@ -367,12 +367,16 @@ def filter_variants(in_vcf, out_vcf, filter_yaml_file):
         hard_filter = False
         i = 0
         for vcf_filter in vcf_filters:
-            if vcf_filter(variant):
-                if soft_filters[i][1]:
-                    variant.filter.add(filters["filters"][soft_filters[i][0]]["soft_filter_flag"])
-                else:
-                    hard_filter = True
-            i += 1
+            try:
+                if vcf_filter(variant):
+                    if soft_filters[i][1]:
+                        variant.filter.add(filters["filters"][soft_filters[i][0]]["soft_filter_flag"])
+                    else:
+                        hard_filter = True
+                i += 1
+            except TypeError as e:
+                log.error("Could not filter variant: '{}' with filter '{}'\n".format(str(variant), str(vcf_filter)))
+                raise e
         if not hard_filter:
             vcf_out.write(variant)
 
