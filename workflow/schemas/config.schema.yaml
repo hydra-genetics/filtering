@@ -23,16 +23,8 @@ properties:
     fasta:
       type: string
       description: file with reference fasta file
-    artifacts:
-      type: string
-      description: file with artifact data used in artifact_filter
-    background:
-      type: string
-      description: file with background level data used in background_filter
     required:
       - fasta
-      - artifacts
-      - background
 
   bcftools_filter_exclude_region:
     type: object
