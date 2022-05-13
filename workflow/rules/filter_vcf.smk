@@ -9,13 +9,13 @@ rule filter_vcf:
         vcf="{file}.vcf.gz",
         vcf_index="{file}.vcf.gz.tbi",
     output:
-        vcf=temp("{file}.{tag}.vcf"),
+        vcf=temp("{file}.filter.{tag}.vcf"),
     params:
         filter_config=lambda wildcards: config["filter_vcf"][wildcards.tag],
     log:
-        "{file}.{tag}.log",
+        "{file}.filter.{tag}.log",
     benchmark:
-        repeat("{file}.{tag}.benchmark.tsv", config.get("filter_vcf", {}).get("benchmark_repeats", 1))
+        repeat("{file}.filter.{tag}.benchmark.tsv", config.get("filter_vcf", {}).get("benchmark_repeats", 1))
     threads: config.get("filter_vcf", {}).get("threads", config["default_resources"]["threads"])
     resources:
         threads=config.get("filter_vcf", {}).get("threads", config["default_resources"]["threads"]),
