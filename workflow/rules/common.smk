@@ -50,8 +50,8 @@ def compile_output_list(wildcards):
         "annotation/background_annotation": [
             ".background_annotation.include.noexon1.vcf.gz",
             ".background_annotation.exclude.noexon1.vcf.gz",
-            ".background_annotation.soft_filter.vcf",
-            ".background_annotation.hard_filter.vcf",
+            ".background_annotation.snv_soft_filter.vcf",
+            ".background_annotation.snv_hard_filter.vcf",
         ]
     }
     output_files = [

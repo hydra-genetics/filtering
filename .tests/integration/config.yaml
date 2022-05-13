@@ -13,11 +13,9 @@ reference:
 bcftools_filter_include_region:
   noexon1: "reference/twist_DNA_solid.HES45.annotated.noexon1.bed"
 
-hard_filter_vcf:
-  filter_config: "config_hard_filter.yaml"
-
-soft_filter_vcf:
-  filter_config: "config_soft_filter.yaml"
+filter_vcf:
+  snv_hard_filter: "config_hard_filter.yaml"
+  snv_soft_filter: "config_soft_filter.yaml"
 
 bcftools_filter_exclude_region:
   noexon1: "reference/twist_DNA_solid.HES45.annotated.noexon1.bed"

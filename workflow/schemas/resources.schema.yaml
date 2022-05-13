@@ -4,154 +4,82 @@ type: object
 properties:
   default_resources:
     type: object
+    description: default resource definitions
     properties:
       threads:
         type: integer
-        description: default number of threads that will be used by a rule
+        description: default number of threads that will be used
       time:
         type: string
-        description: default max execution time for a rule
+        description: default max execution time
       mem_mb:
         type: integer
-        description: default memory used for a rule
+        description: default memory used
       mem_per_cpu:
         type: integer
-        description: default memory used per cpu for a rule
+        description: default memory used per cpu
       partition:
         type: string
-        description: default partition to use on the cluser for a rule
+        description: default partition to use on the cluser
   required:
     - default_resources
 
   bcftools_filter_exclude_region:
     type: object
+    description: resource definitions for bcftools filter
     properties:
       threads:
         type: integer
-        description: number of threads that will be used by 'bcftools_filter_exclude_region'
+        description: number of threads that will be used
       time:
         type: string
-        description: max execution time for 'bcftools_filter_exclude_region'
+        description: max execution time
       mem_mb:
         type: integer
-        description: memory used for 'bcftools_filter_exclude_region'
+        description: memory used
       mem_per_cpu:
         type: integer
-        description: memory used per cpu for 'bcftools_filter_exclude_region'
+        description: memory used per cpu
       partition:
         type: string
-        description: partition to use on the cluster for 'bcftools_filter_exclude_region'
+        description: partition to use on the cluster
 
   bcftools_filter_include_region:
     type: object
+    description: resource definitions for bcftools filter
     properties:
       threads:
         type: integer
-        description: number of threads that will be used by 'bcftools_filter_include_region'
+        description: number of threads that will be used
       time:
         type: string
-        description: max execution time for 'bcftools_filter_include_region'
+        description: max execution time
       mem_mb:
         type: integer
-        description: memory used for 'bcftools_filter_include_region'
+        description: memory used
       mem_per_cpu:
         type: integer
-        description: memory used per cpu for 'bcftools_filter_include_region'
+        description: memory used per cpu
       partition:
         type: string
-        description: partition to use on the cluster for 'bcftools_filter_include_region'
+        description: partition to use on the cluster
 
-  bgzip_vcf:
+  filter_vcf:
     type: object
+    description: resource definitions for filter vcf
     properties:
       threads:
         type: integer
-        description: number of threads that will be used by 'bgzip_vcf'
+        description: number of threads that will be used
       time:
         type: string
-        description: max execution time for 'bgzip_vcf'
+        description: max execution time
       mem_mb:
         type: integer
-        description: memory used for 'bgzip_vcf'
+        description: memory used
       mem_per_cpu:
         type: integer
-        description: memory used per cpu for 'bgzip_vcf'
+        description: memory used per cpu
       partition:
         type: string
-        description: partition to use on the cluster for 'bgzip_vcf'
-
-  hard_filter_vcf:
-    type: object
-    properties:
-      threads:
-        type: integer
-        description: number of threads that will be used by 'hard_filter_vcf'
-      time:
-        type: string
-        description: max execution time for 'hard_filter_vcf'
-      mem_mb:
-        type: integer
-        description: memory used for 'hard_filter_vcf'
-      mem_per_cpu:
-        type: integer
-        description: memory used per cpu for 'hard_filter_vcf'
-      partition:
-        type: string
-        description: partition to use on the cluster for 'hard_filter_vcf'
-
-  soft_filter_vcf:
-    type: object
-    properties:
-      threads:
-        type: integer
-        description: number of threads that will be used by 'soft_filter_vcf'
-      time:
-        type: string
-        description: max execution time for 'soft_filter_vcf'
-      mem_mb:
-        type: integer
-        description: memory used for 'soft_filter_vcf'
-      mem_per_cpu:
-        type: integer
-        description: memory used per cpu for 'soft_filter_vcf'
-      partition:
-        type: string
-        description: partition to use on the cluster for 'soft_filter_vcf'
-
-  sort_vcf:
-    type: object
-    properties:
-      threads:
-        type: integer
-        description: number of threads that will be used by 'sort_vcf'
-      time:
-        type: string
-        description: max execution time for 'sort_vcf'
-      mem_mb:
-        type: integer
-        description: memory used for 'sort_vcf'
-      mem_per_cpu:
-        type: integer
-        description: memory used per cpu for 'sort_vcf'
-      partition:
-        type: string
-        description: partition to use on the cluster for 'sort_vcf'
-
-  tabix_vcf:
-    type: object
-    properties:
-      threads:
-        type: integer
-        description: number of threads that will be used by 'tabix_vcf'
-      time:
-        type: string
-        description: max execution time for 'tabix_vcf'
-      mem_mb:
-        type: integer
-        description: memory used for 'tabix_vcf'
-      mem_per_cpu:
-        type: integer
-        description: memory used per cpu for 'tabix_vcf'
-      partition:
-        type: string
-        description: partition to use on the cluster for 'tabix_vcf'
+        description: partition to use on the cluster
