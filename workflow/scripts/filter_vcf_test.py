@@ -205,6 +205,20 @@ class TestUnitUtils(unittest.TestCase):
                            creater_filter(".tests/integration/config_filter_vep_existexpression_unittest_3.yaml",  # noqa
                                           expression_converter))
 
+        test_table = {
+                        "chr1:934486-934487": False,  # -
+                        "chr1:935221-935222": False,  # -
+                        "chr1:935338-935339": True,  # COSV52662066&COSV52670856&COSV52707054&COSV53164203
+                        "chr1:2460943-2460947": False,  # -
+                        "chr1:2460960-2460961": False,  # -
+                        "chr1:2461206-2461207": False  # -
+                      }
+
+        self._test_filters(test_table,
+                           VariantFile(self.in_vcf),
+                           creater_filter(".tests/integration/config_filter_vep_existexpression_unittest_4.yaml",  # noqa
+                                          expression_converter))
+
     def test_soft_and_hard_filtering(self):
         tempdir = tempfile.mkdtemp()
         vcf = os.path.join(tempdir, "test.vcf")
