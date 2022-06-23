@@ -153,9 +153,9 @@ def create_convert_expression_function(annotation_extractors):
         if value is None:
             value = ""
         if "!exist" in expression:
-            return re.match(regex_exist, value) is None
+            return re.search(regex_exist, value) is None
         else:
-            return re.match(regex_exist, value) is not None
+            return re.search(regex_exist, value) is not None
 
     def compare_data(comparison, value1, value2, index1=None, index2=None, na_handling="NA_FALSE", expression=""):
         if isinstance(value1, float):
