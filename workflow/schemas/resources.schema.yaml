@@ -6,80 +6,87 @@ properties:
     type: object
     description: default resource definitions
     properties:
-      threads:
-        type: integer
-        description: default number of threads that will be used
-      time:
-        type: string
-        description: default max execution time
       mem_mb:
         type: integer
-        description: default memory used
+        description: default memory in MB used for a rule
       mem_per_cpu:
         type: integer
-        description: default memory used per cpu
+        description: default memory in MB used per cpu for a rule
       partition:
         type: string
-        description: default partition to use on the cluser
+        description: default partition to use on the cluster for a rule
+      threads:
+        type: integer
+        description: default number of threads that will be used by a rule
+      time:
+        type: string
+        description: default max execution time for a rule
+    required:
+      - mem_mb
+      - mem_per_cpu
+      - partition
+      - threads
+      - time
+
   required:
     - default_resources
 
   bcftools_filter_exclude_region:
     type: object
-    description: resource definitions for bcftools filter
+    description: resource definitions for bcftools_filter_exclude_region
     properties:
-      threads:
-        type: integer
-        description: number of threads that will be used
-      time:
-        type: string
-        description: max execution time
       mem_mb:
         type: integer
-        description: memory used
+        description: memory in MB used per cpu
       mem_per_cpu:
         type: integer
         description: memory used per cpu
       partition:
         type: string
-        description: partition to use on the cluster
+        description: partition to use on cluster
+      threads:
+        type: integer
+        description: number of threads to be available
+      time:
+        type: string
+        description: max execution time
 
   bcftools_filter_include_region:
     type: object
-    description: resource definitions for bcftools filter
+    description: resource definitions for bcftools_filter_include_region
     properties:
-      threads:
-        type: integer
-        description: number of threads that will be used
-      time:
-        type: string
-        description: max execution time
       mem_mb:
         type: integer
-        description: memory used
+        description: memory in MB used per cpu
       mem_per_cpu:
         type: integer
         description: memory used per cpu
       partition:
         type: string
-        description: partition to use on the cluster
+        description: partition to use on cluster
+      threads:
+        type: integer
+        description: number of threads to be available
+      time:
+        type: string
+        description: max execution time
 
   filter_vcf:
     type: object
-    description: resource definitions for filter vcf
+    description: resource definitions for filter_vcf
     properties:
-      threads:
-        type: integer
-        description: number of threads that will be used
-      time:
-        type: string
-        description: max execution time
       mem_mb:
         type: integer
-        description: memory used
+        description: memory in MB used per cpu
       mem_per_cpu:
         type: integer
         description: memory used per cpu
       partition:
         type: string
-        description: partition to use on the cluster
+        description: partition to use on cluster
+      threads:
+        type: integer
+        description: number of threads to be available
+      time:
+        type: string
+        description: max execution time

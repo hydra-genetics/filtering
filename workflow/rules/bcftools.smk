@@ -1,6 +1,3 @@
-# vim: syntax=python tabstop=4 expandtab
-# coding: utf-8
-
 __author__ = "Jonas Almlöf"
 __copyright__ = "Copyright 2021, Jonas Almlöf"
 __email__ = "jonas.almlof@scilifelab.uu.se"
@@ -25,19 +22,19 @@ rule bcftools_filter_include_region:
         )
     threads: config.get("bcftools_filter_include_region", {}).get("threads", config["default_resources"]["threads"])
     resources:
-        threads=config.get("bcftools_filter_include_region", {}).get("threads", config["default_resources"]["threads"]),
-        time=config.get("bcftools_filter_include_region", {}).get("time", config["default_resources"]["time"]),
         mem_mb=config.get("bcftools_filter_include_region", {}).get("mem_mb", config["default_resources"]["mem_mb"]),
         mem_per_cpu=config.get("bcftools_filter_include_region", {}).get(
             "mem_per_cpu", config["default_resources"]["mem_per_cpu"]
         ),
         partition=config.get("bcftools_filter_include_region", {}).get("partition", config["default_resources"]["partition"]),
+        threads=config.get("bcftools_filter_include_region", {}).get("threads", config["default_resources"]["threads"]),
+        time=config.get("bcftools_filter_include_region", {}).get("time", config["default_resources"]["time"]),
     container:
         config.get("bcftools_filter_include_region", {}).get("container", config["default_container"])
     conda:
         "../envs/bcftools.yaml"
     message:
-        "{rule}: Use bedtools to include variants in vcf overlapping bed: {wildcards.file}.include.{wildcards.tag}.vcf"
+        "{rule}: Use bedtools to include variants in vcf overlapping bed: {output.vcf}"
     shell:
         "(bcftools filter "
         "{params.filter} "
@@ -64,19 +61,19 @@ rule bcftools_filter_exclude_region:
         )
     threads: config.get("bcftools_filter_exclude_region", {}).get("threads", config["default_resources"]["threads"])
     resources:
-        threads=config.get("bcftools_filter_exclude_region", {}).get("threads", config["default_resources"]["threads"]),
-        time=config.get("bcftools_filter_exclude_region", {}).get("time", config["default_resources"]["time"]),
         mem_mb=config.get("bcftools_filter_exclude_region", {}).get("mem_mb", config["default_resources"]["mem_mb"]),
         mem_per_cpu=config.get("bcftools_filter_exclude_region", {}).get(
             "mem_per_cpu", config["default_resources"]["mem_per_cpu"]
         ),
         partition=config.get("bcftools_filter_exclude_region", {}).get("partition", config["default_resources"]["partition"]),
+        threads=config.get("bcftools_filter_exclude_region", {}).get("threads", config["default_resources"]["threads"]),
+        time=config.get("bcftools_filter_exclude_region", {}).get("time", config["default_resources"]["time"]),
     container:
         config.get("bcftools_filter_exclude_region", {}).get("container", config["default_container"])
     conda:
         "../envs/bcftools.yaml"
     message:
-        "{rule}: use bedtools to exclude variants in vcf overlapping bed: {wildcards.file}.exclude.{wildcards.tag}.vcf"
+        "{rule}: use bedtools to exclude variants in vcf overlapping bed: {output.vcf}"
     shell:
         "(bcftools filter "
         "{params.filter} "
