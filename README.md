@@ -107,13 +107,19 @@ See [COMPATIBLITY.md](../master/COMPATIBLITY.md) file for a complete list of mod
 
 ### Output files
 
-The following output files should be targeted via another rule:
+The following output files should be targeted via another rule (see [Config](https://github.com/hydra-genetics/filtering/blob/develop/README.md#Config) for more info):
 
 | File | Description |
 |---|---|
 | `{file}.include.{tag}.vcf.gz` | vcf filtered by bcftools include |
 | `{file}.exclude.{tag}.vcf.gz` | vcf filtered by bcftools exclude |
 | `{file}.filter.{tag}.vcf.gz` | vcf filtered based on annotations |
+
+### Config
+
+The {tag} in the output file must be defined in the config file for the specifc rule that should be applied, see example in [config.yaml](https://github.com/hydra-genetics/filtering/blob/develop/.tests/integration/config.yaml) where:
+ - row 14 defines tag: 'noexon1' for rule bcftools_filter_include_region
+ - row 20 defines tag: 'snv_hard_filter' for rule filter_vcf
 
 ## :judge: Rule Graph
 
