@@ -1,12 +1,12 @@
-# <img src="https://github.com/hydra-genetics/biomarker/blob/develop/images/hydragenetics.png" width=40 /> hydra-genetics/filtering
+# <img src="https://github.com/hydra-genetics/biomarker/blob/master/images/hydragenetics.png" width=40 /> hydra-genetics/filtering
 
 Collection of variant filters
 
-![Lint](https://github.com/hydra-genetics/filtering/actions/workflows/lint.yaml/badge.svg?branch=develop)
-![Snakefmt](https://github.com/hydra-genetics/filtering/actions/workflows/snakefmt.yaml/badge.svg?branch=develop)
-![snakemake dry run](https://github.com/hydra-genetics/filtering/actions/workflows/snakemake-dry-run.yaml/badge.svg?branch=develop)
-![integration test](https://github.com/hydra-genetics/filtering/actions/workflows/integration.yaml/badge.svg?branch=develop)
-![pycodestyle](https://github.com/hydra-genetics/filtering/actions/workflows/pycodestyl.yaml/badge.svg?branch=develop)
+![Lint](https://github.com/hydra-genetics/filtering/actions/workflows/lint.yaml/badge.svg?branch=master)
+![Snakefmt](https://github.com/hydra-genetics/filtering/actions/workflows/snakefmt.yaml/badge.svg?branch=master)
+![snakemake dry run](https://github.com/hydra-genetics/filtering/actions/workflows/snakemake-dry-run.yaml/badge.svg?branch=master)
+![integration test](https://github.com/hydra-genetics/filtering/actions/workflows/integration.yaml/badge.svg?branch=master)
+![pycodestyle](https://github.com/hydra-genetics/filtering/actions/workflows/pycodestyl.yaml/badge.svg?branch=master)
 
 [![License: GPL-3](https://img.shields.io/badge/License-GPL3-yellow.svg)](https://opensource.org/licenses/gpl-3.0.html)
 
@@ -20,7 +20,7 @@ Regions filtering is based on bcftools and inculdes or excludes variants based o
 
 ### Annotation based filtering
 
-Filter criteria are defined in a .yaml file and can be [hard filters](https://github.com/hydra-genetics/filtering/blob/develop/.tests/integration/config_hard_filter.yaml) or [soft filters](https://github.com/hydra-genetics/filtering/blob/develop/.tests/integration/config_soft_filter.yaml) where a filter flag is added to the filter column in the VCF file. Example of annotations that can be used are those found in the format column or added by VEP. Filter criteria can be combined by logical operators. For matching annotations there is the possibility to use regular expressions in combination with for example exist. Also, NA-behavior can be specified.
+Filter criteria are defined in a .yaml file and can be [hard filters](https://github.com/hydra-genetics/filtering/blob/master/.tests/integration/config_hard_filter.yaml) or [soft filters](https://github.com/hydra-genetics/filtering/blob/master/.tests/integration/config_soft_filter.yaml) where a filter flag is added to the filter column in the VCF file. Example of annotations that can be used are those found in the format column or added by VEP. Filter criteria can be combined by logical operators. For matching annotations there is the possibility to use regular expressions in combination with for example exist. Also, NA-behavior can be specified.
 
 ## :heavy_exclamation_mark: Dependencies
 
@@ -38,8 +38,8 @@ In order to use this module, the following dependencies are required:
 
 ### Sample and unit data
 
-Input data should be added to [`samples.tsv`](https://github.com/hydra-genetics/prealignment/blob/develop/config/samples.tsv)
-and [`units.tsv`](https://github.com/hydra-genetics/prealignment/blob/develop/config/units.tsv).
+Input data should be added to [`samples.tsv`](https://github.com/hydra-genetics/filtering/blob/master/config/samples.tsv)
+and [`units.tsv`](https://github.com/hydra-genetics/filtering/blob/master/config/units.tsv).
 The following information need to be added to these files:
 
 | Column Id | Description |
@@ -107,7 +107,7 @@ See [COMPATIBLITY.md](../master/COMPATIBLITY.md) file for a complete list of mod
 
 ### Output files
 
-The following output files should be targeted via another rule (see [Config](https://github.com/hydra-genetics/filtering/blob/develop/README.md#Config) for more info):
+The following output files should be targeted via another rule (see [Config](https://github.com/hydra-genetics/filtering/blob/master/README.md#Config) for more info):
 
 | File | Description |
 |---|---|
@@ -117,7 +117,7 @@ The following output files should be targeted via another rule (see [Config](htt
 
 ### Config
 
-The {tag} in the output file must be defined in the config file for the specifc rule that should be applied, see example in [config.yaml](https://github.com/hydra-genetics/filtering/blob/develop/.tests/integration/config.yaml) where:
+The {tag} in the output file must be defined in the config file for the specifc rule that should be applied, see example in [config.yaml](https://github.com/hydra-genetics/filtering/blob/master/.tests/integration/config.yaml) where:
  - row 14 defines tag: 'noexon1' for rule bcftools_filter_include_region
  - row 20 defines tag: 'snv_hard_filter' for rule filter_vcf
 
