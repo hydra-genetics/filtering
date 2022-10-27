@@ -77,7 +77,7 @@ Add the module to your `Snakefile` like so:
 module biomarker:
     snakefile:
         github(
-            "hydra-genetics/biomarker",
+            "hydra-genetics/filter",
             path="workflow/Snakefile",
             tag="v0.1.0",
         )
