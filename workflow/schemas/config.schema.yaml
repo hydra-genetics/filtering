@@ -2,18 +2,79 @@ $schema: "http://json-schema.org/draft-04/schema#"
 description: snakemake configuration file
 type: object
 properties:
-  samples:
-    type: string
-  units:
-    type: string
-  resources:
-    type: string
-    description: Path to resources.yaml file
+  reference:
+    fasta:
+      type: string
+      description: file with reference fasta file
+    required:
+      - fasta
+
+  required:
+    - default_container
+    - resources
+    - samples
+    - units
+
   default_container:
     type: string
     description: name or path to a default docker/singularity container
-  required:
-    - samples
-    - units
-    - resources
-    - default_container
+
+  resources:
+    type: string
+    description: Path to resources.yaml file
+
+  samples:
+    type: string
+    description: path to samples.tsv file
+
+  units:
+    type: string
+    description: path to units.tsv file
+
+  bcftools_filter_exclude_region:
+    type: object
+    description: parameters for bcftools filter
+    properties:
+      benchmark_repeats:
+        type: integer
+        description: set number of times benchmark should be repeated
+      container:
+        type: string
+        description: name or path to docker/singularity container
+      filter:
+        type: string
+        description: Exclude variants in vcf file based on regions in bed file. INDELs are exluded based on start position.
+      extra:
+        type: string
+        description: extra parameters
+
+  bcftools_filter_include_region:
+    type: object
+    description: parameters for bcftools filter
+    properties:
+      benchmark_repeats:
+        type: integer
+        description: set number of times benchmark should be repeated
+      container:
+        type: string
+        description: name or path to docker/singularity container
+      filter:
+        type: string
+        description: Include variants in vcf file based on regions in bed file. Overlapping regions lead to duplicated variants.
+      extra:
+        type: string
+        description: extra parameters
+
+  filter_vcf:
+    type: object
+    description: parameters for filter vcf
+    properties:
+      benchmark_repeats:
+        type: integer
+        description: set number of times benchmark should be repeated
+      container:
+        type: string
+        description: name or path to docker/singularity container
+      filter_config:
+        type: string
+        description: Config file specifying which filters should be applied.

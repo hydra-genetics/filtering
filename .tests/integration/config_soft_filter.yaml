@@ -1,0 +1,21 @@
+filters:
+  gene:
+    description: "Soft filter the SAMD11 gene"
+    expression: "VEP:SYMBOL = SAMD11"
+    soft_filter_flag: "SAMD11"
+    soft_filter: "True"
+  ad:
+    description: "Soft filter low AD"
+    expression: "FORMAT:AD:1 < 60"
+    soft_filter_flag: "AD<60"
+    soft_filter: "True"
+  germline:
+    description: "Soft filter germline"
+    expression: "(VEP:AF > 0.01 and !exist[COSV_[0-9]+, VEP:Existing_variation])"
+    soft_filter_flag: "Germline"
+    soft_filter: "True"
+  artifacts:
+    description: "Soft filter artifacts"
+    expression: "(INFO:Artifact:0 > 0 or INFO:Artifact:1 > 0)"
+    soft_filter_flag: "Artifacts"
+    soft_filter: "True"
