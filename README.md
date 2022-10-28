@@ -123,6 +123,6 @@ The {tag} in the output file must be defined in the config file for the specifc 
 
 ## :judge: Rule Graph
 
-### Biomarker
+### Filtering
 
-![rule_graph](images/biomarker.svg)
+![rule_graph](images/filtering.svg)
