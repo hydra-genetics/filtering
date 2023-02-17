@@ -324,7 +324,7 @@ def check_yaml_file(variants, filters):
             variants.header.filters.add(filters["filters"][filter]["soft_filter_flag"], None, None, filter_text)
 
 
-def filter_variants(in_vcf, out_vcf, filter_yaml_file):
+def filter_variants(sample_name, in_vcf, out_vcf, filter_yaml_file):
     variants = VariantFile(in_vcf)
     log = logging.getLogger()
 
@@ -350,8 +350,13 @@ def filter_variants(in_vcf, out_vcf, filter_yaml_file):
 
     vcf_out = VariantFile(out_vcf, 'w', header=variants.header)
 
+    log.info("Mapping samples")
+    sample_format_index_mapper = {sample: index for index, sample in enumerate(variants.header.samples)}
+    print(sample_format_index_mapper)
+    sample_index = sample_format_index_mapper[sample_name]
+    print(sample_index)
     log.info("Process variants")
-    annotation_extractor['FORMAT'] = utils.get_annotation_data_format
+    annotation_extractor['FORMAT'] = utils.get_annotation_data_format(sample_index)
     annotation_extractor['INFO'] = utils.get_annotation_data_info
     expression_converter = create_convert_expression_function(annotation_extractor)
 
@@ -384,8 +389,9 @@ def filter_variants(in_vcf, out_vcf, filter_yaml_file):
 
 
 if __name__ == "__main__":
+    sample_name = snakemake.params.sample_name
     in_vcf = snakemake.input.vcf
     out_vcf = snakemake.output.vcf
     filter_yaml_file = snakemake.params.filter_config
 
-    filter_variants(in_vcf, out_vcf, filter_yaml_file)
+    filter_variants(sample_name, in_vcf, out_vcf, filter_yaml_file)

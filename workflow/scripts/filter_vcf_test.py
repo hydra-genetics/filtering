@@ -29,6 +29,7 @@ def creater_filter(yaml_file, expression_converter):
 class TestUnitUtils(unittest.TestCase):
     def setUp(self):
         self.in_vcf = ".tests/integration/snv_indels/ensemble_vcf/HD832.HES45_T.ensembled.vep_annotated.vcf.gz"
+        self.sample = "VAL-01"
 
     def tearDown(self):
         pass
@@ -90,7 +91,7 @@ class TestUnitUtils(unittest.TestCase):
                 if record['ID'] == "CSQ":
                     vep_fields = {v: c for c, v in enumerate(record['Description'].split("Format: ")[1].split("|"))}
                     annotation_extractor["VEP"] = utils.get_annotation_data_vep(vep_fields)
-        annotation_extractor['FORMAT'] = utils.get_annotation_data_format
+        annotation_extractor['FORMAT'] = utils.get_annotation_data_format(0)
         annotation_extractor['INFO'] = utils.get_annotation_data_info
         expression_converter = create_convert_expression_function(annotation_extractor)
 
@@ -223,7 +224,7 @@ class TestUnitUtils(unittest.TestCase):
         tempdir = tempfile.mkdtemp()
         vcf = os.path.join(tempdir, "test.vcf")
         with open(vcf, 'w', encoding="ascii") as out_vcf:
-            filter_variants(self.in_vcf, out_vcf, ".tests/unit/config_filter_format_and_vep_hard_and_soft_unittest_1.yaml")
+            filter_variants("VAL-01", self.in_vcf, out_vcf, ".tests/unit/config_filter_format_and_vep_hard_and_soft_unittest_1.yaml")
         with VariantFile(vcf) as variants:
             test_table = {
                             "chr1:934486-934487": "SAMD11",  # SAMD11 1108,595 0.34
@@ -245,7 +246,7 @@ class TestUnitUtils(unittest.TestCase):
             self.assertEqual(counter, 6)
 
         with open(vcf, 'w', encoding="ascii") as out_vcf:
-            filter_variants(self.in_vcf, out_vcf, ".tests/unit/config_filter_format_and_vep_hard_and_soft_unittest_2.yaml")
+            filter_variants("VAL-01", self.in_vcf, out_vcf, ".tests/unit/config_filter_format_and_vep_hard_and_soft_unittest_2.yaml")
         with VariantFile(vcf) as variants:
             test_table = {
                             "chr1:934486-934487": "SAMD11",  # SAMD11 1108,595
@@ -268,7 +269,7 @@ class TestUnitUtils(unittest.TestCase):
         tempdir = tempfile.mkdtemp()
         vcf = os.path.join(tempdir, "test.vcf")
         with open(vcf, 'w', encoding="ascii") as out_vcf:
-            filter_variants(self.in_vcf, out_vcf, ".tests/unit/config_filter_format_missing_value_unittest_1.yaml")
+            filter_variants("VAL-01", self.in_vcf, out_vcf, ".tests/unit/config_filter_format_missing_value_unittest_1.yaml")
         with VariantFile(vcf) as variants:
             test_table = {
                             "chr1:934486-934487": "SB_mutect2",
@@ -290,7 +291,7 @@ class TestUnitUtils(unittest.TestCase):
             self.assertEqual(counter, 6)
 
         with open(vcf, 'w', encoding="ascii") as out_vcf:
-            filter_variants(self.in_vcf, out_vcf, ".tests/unit/config_filter_format_missing_value_unittest_2.yaml")
+            filter_variants("VAL-01", self.in_vcf, out_vcf, ".tests/unit/config_filter_format_missing_value_unittest_2.yaml")
         with VariantFile(vcf) as variants:
             test_table = {
                             "chr1:934486-934487": "SB_mutect2",
@@ -312,4 +313,4 @@ class TestUnitUtils(unittest.TestCase):
             self.assertEqual(counter, 6)
 
         with self.assertRaises(ValueError):
-            filter_variants(self.in_vcf, out_vcf, ".tests/unit/config_filter_format_missing_value_unittest_3.yaml")
+            filter_variants("VAL-01", self.in_vcf, out_vcf, ".tests/unit/config_filter_format_missing_value_unittest_3.yaml")
