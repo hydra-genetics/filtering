@@ -82,6 +82,24 @@ class TestUnitUtils(unittest.TestCase):
         variant_filter = create_variant_filter(test2, process_string)
         self.assertEqual(variant_filter(""), False)
 
+        test3 = "(false or true) and true"
+        data, _ = _parse_helper(iter(test3))
+        self.assertEqual(data, ([['false', _or_function, 'true'], _and_function, 'true']))
+
+        data = _convert_string(data, process_string)
+        self.assertEqual(data, [[false_fun, _or_function, true_fun], _and_function, true_fun])
+
+        variant_filter = create_variant_filter(test3, process_string)
+        self.assertEqual(variant_filter(""), True)
+
+        self.assertEqual(create_variant_filter("(false or true) and true", process_string)(""), True)
+        self.assertEqual(create_variant_filter("(false or true) and false", process_string)(""), False)
+        self.assertEqual(create_variant_filter("(false or false) and true", process_string)(""), False)
+        self.assertEqual(create_variant_filter("((true or false)) or false) and true", process_string)(""), True)
+        self.assertEqual(create_variant_filter("((false or false)) or false) and true", process_string)(""), False)
+
+
+
     def test_create_convert_expression(self):
         variants = VariantFile(self.in_vcf)
         annotation_extractor = {}
