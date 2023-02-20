@@ -354,17 +354,20 @@ def filter_variants(sample_name_regex, in_vcf, out_vcf, filter_yaml_file):
     sample_format_index_mapper = {sample: index for index, sample in enumerate(variants.header.samples)}
     sample_index = 0
 
-    print(sample_format_index_mapper)
     sample_name_match = False
+    number_of_matches = 0
     for name, index in sample_format_index_mapper.items():
         if re.search(sample_name_regex, name):
             sample_index = index
             sample_name_match = True
-            break
-    
-    if len(sample_format_index_mapper) > 1 and not sample_name_match:
-        raise Exception("More then one sample in vcf and no match with sample name regex")    
-    
+            number_of_matches = number_of_matches + 1
+
+    if number_of_matches > 1:
+        raise Exception("More then one sample match regex")
+
+    if not sample_name_match and len(sample_format_index_mapper) > 1:
+        raise Exception("More then one sample and no regex")
+
     if sample_name_match:
         log.info(f"Using index: {sample_index}, found using regex {sample_name_regex}")
     else:
