@@ -324,7 +324,7 @@ def check_yaml_file(variants, filters):
             variants.header.filters.add(filters["filters"][filter]["soft_filter_flag"], None, None, filter_text)
 
 
-def filter_variants(sample_name, in_vcf, out_vcf, filter_yaml_file):
+def filter_variants(sample_name_regex, in_vcf, out_vcf, filter_yaml_file):
     variants = VariantFile(in_vcf)
     log = logging.getLogger()
 
@@ -352,9 +352,24 @@ def filter_variants(sample_name, in_vcf, out_vcf, filter_yaml_file):
 
     log.info("Mapping samples")
     sample_format_index_mapper = {sample: index for index, sample in enumerate(variants.header.samples)}
+    sample_index = 0
+
     print(sample_format_index_mapper)
-    sample_index = sample_format_index_mapper[sample_name]
-    print(sample_index)
+    sample_name_match = False
+    for name, index in sample_format_index_mapper.items():
+        if re.search(sample_name_regex, name):
+            sample_index = index
+            sample_name_match = True
+            break
+    
+    if len(sample_format_index_mapper) > 1 and not sample_name_match:
+        raise Exception("More then one sample in vcf and no match with sample name regex")    
+    
+    if sample_name_match:
+        log.info(f"Using index: {sample_index}, found using regex {sample_name_regex}")
+    else:
+        log.info(f"Using default index: {sample_index}, nothing found using regex {sample_name_regex}")
+
     log.info("Process variants")
     annotation_extractor['FORMAT'] = utils.get_annotation_data_format(sample_index)
     annotation_extractor['INFO'] = utils.get_annotation_data_info
@@ -389,9 +404,9 @@ def filter_variants(sample_name, in_vcf, out_vcf, filter_yaml_file):
 
 
 if __name__ == "__main__":
-    sample_name = snakemake.params.sample_name
+    sample_name_regex = snakemake.params.sample_name_regex
     in_vcf = snakemake.input.vcf
     out_vcf = snakemake.output.vcf
     filter_yaml_file = snakemake.params.filter_config
 
-    filter_variants(sample_name, in_vcf, out_vcf, filter_yaml_file)
+    filter_variants(sample_name_regex, in_vcf, out_vcf, filter_yaml_file)
