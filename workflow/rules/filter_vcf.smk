@@ -11,7 +11,7 @@ rule filter_vcf:
     output:
         vcf=temp("{file}.filter.{tag}.vcf"),
     params:
-        sample_name_regex="^([A-Za-z0-9-]+_[RT]\{1\})$",
+        sample_name_regex=config.get("filter_vcf", {}).get("sample_name_regex", "^([A-Za-z0-9-]+_[RT]\{1\})$"),
         filter_config=lambda wildcards: config["filter_vcf"][wildcards.tag],
     log:
         "{file}.filter.{tag}.log",
