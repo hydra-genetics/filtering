@@ -84,17 +84,17 @@ rule bcftools_filter_exclude_region:
 
 rule bcftools_view:
     input:
-        vcf="{file}.vcf.gz",
+        vcf="vcf_final/{sample}_{type}.vcf.gz",
     output:
-        vcf=temp("{file}.bcftools_view.vcf.gz"),
+        vcf=temp("vcf_final/{sample}_{type}.bcftools_view.vcf.gz"),
     params:
         extra=config.get("bcftools_view", {}).get("extra", ""),
         out_type=config.get("bcftools_view", {}).get("out_type", ""),
     log:
-        "{file}.bcftools_view.vcf.log",
+        "vcf_final/{sample}_{type}.bcftools_view.vcf.log",
     benchmark:
         repeat(
-            "{file}.bcftools_view.vcf.benchmark.tsv",
+            "vcf_final/{sample}_{type}.bcftools_view.vcf.benchmark.tsv",
             config.get("bcftools_view", {}).get("benchmark_repeats", 1),
         )
     threads: config.get("bcftools_view", {}).get("threads", config["default_resources"]["threads"])
