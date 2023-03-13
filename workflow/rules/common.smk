@@ -52,6 +52,11 @@ def compile_output_list(wildcards):
         ]
     }
     output_files = [
+        "vcf_final/%s_%s.bcftools_view.vcf.gz" % (sample, unit_type)
+        for sample in get_samples(samples)
+        for unit_type in get_unit_types(units, sample)
+    ]
+    output_files = [
         "%s/%s_%s%s" % (prefix, sample, unit_type, suffix)
         for prefix in files
         for sample in get_samples(samples)
