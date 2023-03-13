@@ -3,3 +3,7 @@ samples: "samples.tsv"
 units: "units.tsv"
 
 default_container: "docker://hydragenetics/common:0.1.9"
+
+bcftools_view:
+  extra: " "
+  out_type: "z"
