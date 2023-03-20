@@ -50,6 +50,9 @@ def compile_output_list(wildcards):
             ".background_annotation.filter.snv_soft_filter.vcf",
             ".background_annotation.filter.snv_hard_filter.vcf",
         ]
+        "snv_indels/ensemble_vcf": [
+            ".bcftools_view.vcf.gz",
+        ]
     }
     output_files = [
         "%s/%s_%s%s" % (prefix, sample, unit_type, suffix)
