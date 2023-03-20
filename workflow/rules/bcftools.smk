@@ -89,7 +89,6 @@ rule bcftools_view:
         vcf=temp("{file}.bcftools_view.vcf.gz"),
     params:
         extra=config.get("bcftools_view", {}).get("extra", ""),
-        out_type=config.get("bcftools_view", {}).get("out_type", ""),
     log:
         "{file}.bcftools_view.vcf.log",
     benchmark:
@@ -111,8 +110,4 @@ rule bcftools_view:
     message:
         "{rule}: Use bcftools view to get subset or filter {input.vcf}"
     shell:
-        "(bcftools view "
-        "{params.extra} "
-        "{input.vcf} "
-        "--output-type {params.out_type} "
-        "--output-file {output.vcf}) &> {log}"
+        "v1.24.0/bio/bcftools/view"

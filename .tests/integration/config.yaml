@@ -18,7 +18,6 @@ bcftools_filter_exclude_region:
 
 bcftools_view:
   extra: " "
-  out_type: "z"
 
 filter_vcf:
   snv_hard_filter: "config_hard_filter.yaml"
