@@ -4,4 +4,4 @@ channels:
   - defaults
 dependencies:
   - bcftools==1.15
-  - snakemake-wrapper-utils=0.3.1
+  - snakemake-wrapper-utils==0.3.1
