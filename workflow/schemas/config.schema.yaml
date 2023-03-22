@@ -65,6 +65,20 @@ properties:
         type: string
         description: extra parameters
 
+  bcftools_view:
+    type: object
+    description: parameters for bcftools view
+    properties:
+      benchmark_repeats:
+        type: integer
+        description: set number of times benchmark should be repeated
+      container:
+        type: string
+        description: name or path to docker/singularity container
+      extra:
+        type: string
+        description: parameters for filtering/subset data e.g. --apply-filter PASS or -M2 -m2 -v snps
+
   filter_vcf:
     type: object
     description: parameters for filter vcf
