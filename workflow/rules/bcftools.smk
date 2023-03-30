@@ -109,5 +109,5 @@ rule bcftools_view:
         "../envs/bcftools.yaml"
     message:
         "{rule}: Use bcftools view to get subset or filter {input.vcf}"
-    shell:
+    wrapper:
         "v1.25.0/bio/bcftools/view"
