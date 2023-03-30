@@ -110,4 +110,4 @@ rule bcftools_view:
     message:
         "{rule}: Use bcftools view to get subset or filter {input.vcf}"
     shell:
-        "v1.24.0/bio/bcftools/view"
+        "v1.25.0/bio/bcftools/view"

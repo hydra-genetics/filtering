@@ -5,4 +5,5 @@ units: "units.tsv"
 default_container: "docker://hydragenetics/common:0.1.9"
 
 bcftools_view:
+  container: "docker://hydragenetics/common:0.2.0"
   extra: " "

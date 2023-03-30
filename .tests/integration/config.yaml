@@ -17,6 +17,7 @@ bcftools_filter_exclude_region:
   noexon1: "reference/twist_DNA_solid.HES45.annotated.noexon1.bed"
 
 bcftools_view:
+  container: "docker://hydragenetics/common:0.2.0"
   extra: " "
 
 filter_vcf:
