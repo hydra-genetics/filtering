@@ -25,8 +25,6 @@ rule filter_vcf:
         time=config.get("filter_vcf", {}).get("time", config["default_resources"]["time"]),
     container:
         config.get("filter_vcf", {}).get("container", config["default_container"])
-    conda:
-        "../envs/filter_vcf.yaml"
     message:
         "{rule}: filter vcf {input.vcf} based on annotations"
     script:
