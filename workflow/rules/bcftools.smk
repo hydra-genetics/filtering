@@ -103,5 +103,5 @@ rule bcftools_view:
         config.get("bcftools_view", {}).get("container", config["default_container"])
     message:
         "{rule}: Use bcftools view to get subset or filter {input.vcf}"
-    shell:
+    wrapper:
         "v1.24.0/bio/bcftools/view"
