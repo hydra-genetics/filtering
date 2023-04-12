@@ -31,8 +31,6 @@ rule bcftools_filter_include_region:
         time=config.get("bcftools_filter_include_region", {}).get("time", config["default_resources"]["time"]),
     container:
         config.get("bcftools_filter_include_region", {}).get("container", config["default_container"])
-    conda:
-        "../envs/bcftools.yaml"
     message:
         "{rule}: Use bedtools to include variants in vcf overlapping bed: {output.vcf}"
     shell:
@@ -70,8 +68,6 @@ rule bcftools_filter_exclude_region:
         time=config.get("bcftools_filter_exclude_region", {}).get("time", config["default_resources"]["time"]),
     container:
         config.get("bcftools_filter_exclude_region", {}).get("container", config["default_container"])
-    conda:
-        "../envs/bcftools.yaml"
     message:
         "{rule}: use bedtools to exclude variants in vcf overlapping bed: {output.vcf}"
     shell:
@@ -105,8 +101,6 @@ rule bcftools_view:
         time=config.get("bcftools_view", {}).get("time", config["default_resources"]["time"]),
     container:
         config.get("bcftools_view", {}).get("container", config["default_container"])
-    conda:
-        "../envs/bcftools.yaml"
     message:
         "{rule}: Use bcftools view to get subset or filter {input.vcf}"
     shell:
