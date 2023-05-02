@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.2.0](https://www.github.com/hydra-genetics/filtering/compare/v0.1.0...v0.2.0) (2023-05-02)
+
+
+### Features
+
+* drop conda support and testing ([9e95813](https://www.github.com/hydra-genetics/filtering/commit/9e9581376103d72ca2424b2ffecb854e21aecf33))
+
+
+### Bug Fixes
+
+* change shell to wrapper for bcftools view ([6cd7f8b](https://www.github.com/hydra-genetics/filtering/commit/6cd7f8beb7dfc1ebf04dd94ffad7ba4b670be590))
+
 ## 0.1.0 (2022-10-28)
 
 
