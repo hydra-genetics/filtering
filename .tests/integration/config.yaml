@@ -2,7 +2,7 @@ resources: "resources.yaml"
 samples: "samples.tsv"
 units: "units.tsv"
 
-default_container: "docker://hydragenetics/common:0.1.9"
+default_container: "docker://hydragenetics/common:0.2.0"
 
 reference:
   fasta: "reference/HES45.fna"
@@ -15,6 +15,9 @@ bcftools_filter_include_region:
 
 bcftools_filter_exclude_region:
   noexon1: "reference/twist_DNA_solid.HES45.annotated.noexon1.bed"
+
+bcftools_view:
+  extra: " "
 
 filter_vcf:
   snv_hard_filter: "config_hard_filter.yaml"

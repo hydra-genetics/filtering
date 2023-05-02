@@ -31,8 +31,6 @@ rule bcftools_filter_include_region:
         time=config.get("bcftools_filter_include_region", {}).get("time", config["default_resources"]["time"]),
     container:
         config.get("bcftools_filter_include_region", {}).get("container", config["default_container"])
-    conda:
-        "../envs/bcftools.yaml"
     message:
         "{rule}: Use bedtools to include variants in vcf overlapping bed: {output.vcf}"
     shell:
@@ -70,8 +68,6 @@ rule bcftools_filter_exclude_region:
         time=config.get("bcftools_filter_exclude_region", {}).get("time", config["default_resources"]["time"]),
     container:
         config.get("bcftools_filter_exclude_region", {}).get("container", config["default_container"])
-    conda:
-        "../envs/bcftools.yaml"
     message:
         "{rule}: use bedtools to exclude variants in vcf overlapping bed: {output.vcf}"
     shell:
@@ -80,3 +76,32 @@ rule bcftools_filter_exclude_region:
         "{params.extra} "
         "{input.vcf} "
         "-o {output.vcf}) &> {log}"
+
+
+rule bcftools_view:
+    input:
+        vcf="{file}.vcf.gz",
+    output:
+        vcf=temp("{file}.bcftools_view.vcf.gz"),
+    params:
+        extra=config.get("bcftools_view", {}).get("extra", ""),
+    log:
+        "{file}.bcftools_view.vcf.log",
+    benchmark:
+        repeat(
+            "{file}.bcftools_view.vcf.benchmark.tsv",
+            config.get("bcftools_view", {}).get("benchmark_repeats", 1),
+        )
+    threads: config.get("bcftools_view", {}).get("threads", config["default_resources"]["threads"])
+    resources:
+        mem_mb=config.get("bcftools_view", {}).get("mem_mb", config["default_resources"]["mem_mb"]),
+        mem_per_cpu=config.get("bcftools_view", {}).get("mem_per_cpu", config["default_resources"]["mem_per_cpu"]),
+        partition=config.get("bcftools_view", {}).get("partition", config["default_resources"]["partition"]),
+        threads=config.get("bcftools_view", {}).get("threads", config["default_resources"]["threads"]),
+        time=config.get("bcftools_view", {}).get("time", config["default_resources"]["time"]),
+    container:
+        config.get("bcftools_view", {}).get("container", config["default_container"])
+    message:
+        "{rule}: Use bcftools view to get subset or filter {input.vcf}"
+    wrapper:
+        "v1.24.0/bio/bcftools/view"
