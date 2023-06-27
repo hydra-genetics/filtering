@@ -370,7 +370,6 @@ def filter_variants(sample_name_regex, in_vcf, out_vcf, filter_yaml_file):
                 vep_fields = {v: c for c, v in enumerate(record['Description'].split("Format: ")[1].split("|"))}
                 annotation_extractor["VEP"] = utils.get_annotation_data_vep(vep_fields)
 
-    annotation_extractor["QUAL"] = lambda variant: None if variant.qual == '.' else variant.qual
     vcf_out = VariantFile(out_vcf, 'w', header=variants.header)
 
     log.info("Mapping samples")
