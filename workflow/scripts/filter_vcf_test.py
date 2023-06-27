@@ -375,3 +375,20 @@ class TestUnitUtils(unittest.TestCase):
         with self.assertRaises(ValueError):
             filter_variants("^[A-Za-z0-9-]+_[RN]{1}$", self.in_vcf, out_vcf,
                             ".tests/unit/config_filter_format_missing_value_unittest_3.yaml")
+
+    def test_qual_filter(self):
+        test_table = {
+                "chr1:934486-934487": False,  # .
+                "chr1:935221-935222": False,  # .
+                "chr1:935338-935339": False,  # .
+                "chr1:2460943-2460947": False,  # 110
+                "chr1:2460960-2460961": True,  # 61
+                "chr1:2461206-2461207": False  # .
+                }
+        annotation_extractor = {}
+        annotation_extractor["QUAL"] = lambda variant: None if variant.qual == '.' else variant.qual
+        expression_converter = create_convert_expression_function(annotation_extractor)
+        self._test_filters(test_table,
+                           VariantFile(self.in_vcf),
+                           creater_filter(".tests/unit/config_filter_qual_expression.yaml",
+                                          expression_converter))

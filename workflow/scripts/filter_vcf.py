@@ -218,7 +218,7 @@ def create_convert_expression_function(annotation_extractors):
         }
 
         # Extract information about how None values should be handled during filtering
-        regex_na_handling = r"(VEP|FORMAT|INFO):(NA_TRUE|NA_FALSE|NA_ERROR):"
+        regex_na_handling = r"(VEP|FORMAT|INFO|QUAL):(NA_TRUE|NA_FALSE|NA_ERROR):"
         na_handling = re.search(regex_na_handling, expression)
         if na_handling:
             na_handling = na_handling.groups()[1]
@@ -226,7 +226,7 @@ def create_convert_expression_function(annotation_extractors):
             expression = re.sub(r"(NA_TRUE|NA_FALSE|NA_ERROR):", '', expression)
         else:
             na_handling = "NA_FALSE"
-        regex_string = "[ ]*(VEP|FORMAT|INFO):([A-Za-z0-9_.]+):*([0-9]*)"
+        regex_string = "[ ]*(VEP|FORMAT|INFO|QUAL):([A-Za-z0-9_.]+):*([0-9]*)"
 
         if "exist[" in expression:
             # Handle exist expression
@@ -243,6 +243,27 @@ def create_convert_expression_function(annotation_extractors):
                         value = ",".join(value)
                     return value
             return lambda variant: regex_compare(regex_exist, get_value(variant), expression)
+        elif "QUAL" in expression.strip():
+            data = re.split("[ ]([<>=!]+)[ ]", expression)
+            if "QUAL" in data[0]:
+                value = float(data[2])
+                return lambda variant: compare_data(
+                                                        comparison[data[1]],
+                                                        annotation_extractors["QUAL"](variant),
+                                                        value,
+                                                        na_handling=na_handling,
+                                                        expression=expression
+                                                    )
+            elif "QUAL" in data[2]:
+                value = float(data[0])
+                return lambda variant: compare_data(
+                                                        comparison[data[1]],
+                                                        value,
+                                                        annotation_extractors["QUAL"](variant),
+                                                        na_handling=na_handling,
+                                                        expression=expression
+                                                    )
+
         else:
             # Handle comparison expression
             # Example "FORMAT:NA_TRUE:SB_mutect2:1 > 400"
@@ -349,6 +370,7 @@ def filter_variants(sample_name_regex, in_vcf, out_vcf, filter_yaml_file):
                 vep_fields = {v: c for c, v in enumerate(record['Description'].split("Format: ")[1].split("|"))}
                 annotation_extractor["VEP"] = utils.get_annotation_data_vep(vep_fields)
 
+    annotation_extractor["QUAL"] = lambda variant: None if variant.qual == '.' else variant.qual
     vcf_out = VariantFile(out_vcf, 'w', header=variants.header)
 
     log.info("Mapping samples")
@@ -377,6 +399,7 @@ def filter_variants(sample_name_regex, in_vcf, out_vcf, filter_yaml_file):
     log.info("Process variants")
     annotation_extractor['FORMAT'] = utils.get_annotation_data_format(sample_index)
     annotation_extractor['INFO'] = utils.get_annotation_data_info
+    annotation_extractor['QUAL'] = lambda variant: None if variant.qual == '.' else variant.qual
     expression_converter = create_convert_expression_function(annotation_extractor)
 
     vcf_filters = []
