@@ -1,0 +1,61 @@
+$schema: "http://json-schema.org/draft-04/schema#"
+description: snakemake rule input and output files description file
+type: object
+properties:
+  bcftools_filter_include_region:
+    type: object
+    description: input and output parameters used to filter vcf file by specifying which region that will be keept
+    properties:
+      input:
+        type: object
+        description: list of inputs
+        properties:
+          vcf:
+            type: string
+            description: compressed vcf file
+          tabix:
+            type: string
+            value: path to index file belonging to file that will be filtered
+            description: index of compressed vcf file
+      output:
+        type: object
+        description: list of outputs
+        properties:
+          vcf:
+            type: string
+            description: output path for filtered vcf-file
+      params:
+        type: object
+        description: list of parameters that can be configured
+        properties:
+          filter:
+            type: string
+            description: 
+
+
+  bcftools_filter_exclude_region:
+    type: object
+    description: input and output parameters used to filter vcf file by specifying which region that will be excluded
+    properties:
+      input:
+        type: object
+        description: list of inputs
+        properties:
+          vcf:
+            type: string
+            description: compressed vcf file
+          tabix:
+            type: string
+            value: path to index file belonging to file that will be filtered
+            description: index of compressed vcf file
+      output:
+        type: object
+        description: list of outputs
+        properties:
+          vcf:
+            type: string
+            description: output path for filtered vcf-file
+
+        filter=lambda wildcards: "-T ^%s" % config["bcftools_filter_exclude_region"][wildcards.tag],
+        extra=config.get("bcftools_filter_exclude_region", {}).get("extra", ""),
+          
