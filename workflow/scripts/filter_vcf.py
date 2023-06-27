@@ -226,7 +226,7 @@ def create_convert_expression_function(annotation_extractors):
             expression = re.sub(r"(NA_TRUE|NA_FALSE|NA_ERROR):", '', expression)
         else:
             na_handling = "NA_FALSE"
-        regex_string = "[ ]*(VEP|FORMAT|INFO|QUAL):([A-Za-z0-9_.]+):*([0-9]*)"
+        regex_string = "[ ]*(VEP|FORMAT|INFO):([A-Za-z0-9_.]+):*([0-9]*)"
 
         if "exist[" in expression:
             # Handle exist expression
