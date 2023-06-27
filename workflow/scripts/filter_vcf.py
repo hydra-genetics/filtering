@@ -23,7 +23,7 @@ def _or_function(v1, v2): return v1 or v2
 
 def _parse_helper(f_iterator):
     """
-    function used to parse a string with parantes and create a nested fail_filter_list
+    function used to parse a string with parenthesis and create a nested fail_filter_list
 
     :param f_iterator: filter string that will be parsed
     :type f_iterator: string iterator
@@ -186,21 +186,22 @@ def create_convert_expression_function(annotation_extractors):
     def convert_to_expression(expression):
         """
         Valid format of expression is:
-        - DATA_SOURCE:NA_HANLDING(OPTIONAL):FIELD:COLUMN(OPTIONAL) [<|>|=|!=] VALUE
-        - VALUE [<|>|=|!=] DATA_SOURCE:NA_HANLDING(OPTIONAL):FIELD:COLUMN(OPTIONAL)
-        - exist[regex, DATA_SOURCE:NA_HANLDING(OPTIONAL):FIELD:COLUMN]
-        - !exist[regex, DATA_SOURCE:NA_HANLDING(OPTIONAL):FIELD:COLUMN]
+        - DATA_SOURCE:NA_HANDLING(OPTIONAL):FIELD:COLUMN(OPTIONAL) [<|>|=|!=] VALUE
+        - VALUE [<|>|=|!=] DATA_SOURCE:NA_HANDLING(OPTIONAL):FIELD:COLUMN(OPTIONAL)
+        - exist[regex, DATA_SOURCE:NA_HANDLING(OPTIONAL):FIELD:COLUMN]
+        - !exist[regex, DATA_SOURCE:NA_HANDLING(OPTIONAL):FIELD:COLUMN]
 
         DATA_SOURCE:
          - VEP
          - FORMAT
          - INFO
+         - QUAL
 
-        NA_HANLDING:
-         - NA_TRUE: when None is found the exression will return True
-         - NA_FALSE: when None is found the exression will return False
-         - NA_ERROR: when None is found the an error will be raised
-        Default will be NA_PASS, i.e a filter will not remove variant
+        NA_HANDLING:
+         - NA_TRUE: when None is found the expression will return True and filter variant
+         - NA_FALSE: when None is found the expression will return False and not filter variant
+         - NA_ERROR: when None is found the an error will be raised if value not found
+        Default will be NA_FALSE, i.e a filter will not remove variant
 
         FIELD, any field in info, format or vep string
 
