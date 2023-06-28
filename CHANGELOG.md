@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.3.0](https://www.github.com/hydra-genetics/filtering/compare/v0.2.0...v0.3.0) (2023-06-28)
+
+
+### Features
+
+* add vcf filtering on qual column ([96162af](https://www.github.com/hydra-genetics/filtering/commit/96162af848ac167f6942a50a9ef5d3c051f7856d))
+* update snakemake version, allow range up to version 8 ([23fcb3a](https://www.github.com/hydra-genetics/filtering/commit/23fcb3a017904dcd508ff18239872dae2779c8be))
+* update script, rule and test to use regex to extract which sample column to filter
 ## [0.2.0](https://www.github.com/hydra-genetics/filtering/compare/v0.1.0...v0.2.0) (2023-05-02)
 
 
