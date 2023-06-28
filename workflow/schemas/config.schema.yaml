@@ -92,3 +92,6 @@ properties:
       filter_config:
         type: string
         description: Config file specifying which filters should be applied.
+      sample_name_regex:
+        type: string
+        description: Regex used to match which sample column that will be used for filtering.
