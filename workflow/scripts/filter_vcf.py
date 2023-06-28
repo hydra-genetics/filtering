@@ -23,7 +23,7 @@ def _or_function(v1, v2): return v1 or v2
 
 def _parse_helper(f_iterator):
     """
-    function used to parse a string with parantes and create a nested fail_filter_list
+    function used to parse a string with parenthesis and create a nested fail_filter_list
 
     :param f_iterator: filter string that will be parsed
     :type f_iterator: string iterator
@@ -186,21 +186,22 @@ def create_convert_expression_function(annotation_extractors):
     def convert_to_expression(expression):
         """
         Valid format of expression is:
-        - DATA_SOURCE:NA_HANLDING(OPTIONAL):FIELD:COLUMN(OPTIONAL) [<|>|=|!=] VALUE
-        - VALUE [<|>|=|!=] DATA_SOURCE:NA_HANLDING(OPTIONAL):FIELD:COLUMN(OPTIONAL)
-        - exist[regex, DATA_SOURCE:NA_HANLDING(OPTIONAL):FIELD:COLUMN]
-        - !exist[regex, DATA_SOURCE:NA_HANLDING(OPTIONAL):FIELD:COLUMN]
+        - DATA_SOURCE:NA_HANDLING(OPTIONAL):FIELD:COLUMN(OPTIONAL) [<|>|=|!=] VALUE
+        - VALUE [<|>|=|!=] DATA_SOURCE:NA_HANDLING(OPTIONAL):FIELD:COLUMN(OPTIONAL)
+        - exist[regex, DATA_SOURCE:NA_HANDLING(OPTIONAL):FIELD:COLUMN]
+        - !exist[regex, DATA_SOURCE:NA_HANDLING(OPTIONAL):FIELD:COLUMN]
 
         DATA_SOURCE:
          - VEP
          - FORMAT
          - INFO
+         - QUAL
 
-        NA_HANLDING:
-         - NA_TRUE: when None is found the exression will return True
-         - NA_FALSE: when None is found the exression will return False
-         - NA_ERROR: when None is found the an error will be raised
-        Default will be NA_PASS, i.e a filter will not remove variant
+        NA_HANDLING:
+         - NA_TRUE: when None is found the expression will return True and filter variant
+         - NA_FALSE: when None is found the expression will return False and not filter variant
+         - NA_ERROR: when None is found the an error will be raised if value not found
+        Default will be NA_FALSE, i.e a filter will not remove variant
 
         FIELD, any field in info, format or vep string
 
@@ -217,7 +218,7 @@ def create_convert_expression_function(annotation_extractors):
         }
 
         # Extract information about how None values should be handled during filtering
-        regex_na_handling = r"(VEP|FORMAT|INFO):(NA_TRUE|NA_FALSE|NA_ERROR):"
+        regex_na_handling = r"(VEP|FORMAT|INFO|QUAL):(NA_TRUE|NA_FALSE|NA_ERROR):"
         na_handling = re.search(regex_na_handling, expression)
         if na_handling:
             na_handling = na_handling.groups()[1]
@@ -242,6 +243,27 @@ def create_convert_expression_function(annotation_extractors):
                         value = ",".join(value)
                     return value
             return lambda variant: regex_compare(regex_exist, get_value(variant), expression)
+        elif "QUAL" in expression.strip():
+            data = re.split("[ ]([<>=!]+)[ ]", expression)
+            if "QUAL" in data[0]:
+                value = float(data[2])
+                return lambda variant: compare_data(
+                                                        comparison[data[1]],
+                                                        annotation_extractors["QUAL"](variant),
+                                                        value,
+                                                        na_handling=na_handling,
+                                                        expression=expression
+                                                    )
+            elif "QUAL" in data[2]:
+                value = float(data[0])
+                return lambda variant: compare_data(
+                                                        comparison[data[1]],
+                                                        value,
+                                                        annotation_extractors["QUAL"](variant),
+                                                        na_handling=na_handling,
+                                                        expression=expression
+                                                    )
+
         else:
             # Handle comparison expression
             # Example "FORMAT:NA_TRUE:SB_mutect2:1 > 400"
@@ -324,7 +346,7 @@ def check_yaml_file(variants, filters):
             variants.header.filters.add(filters["filters"][filter]["soft_filter_flag"], None, None, filter_text)
 
 
-def filter_variants(in_vcf, out_vcf, filter_yaml_file):
+def filter_variants(sample_name_regex, in_vcf, out_vcf, filter_yaml_file):
     variants = VariantFile(in_vcf)
     log = logging.getLogger()
 
@@ -350,9 +372,33 @@ def filter_variants(in_vcf, out_vcf, filter_yaml_file):
 
     vcf_out = VariantFile(out_vcf, 'w', header=variants.header)
 
+    log.info("Mapping samples")
+    sample_format_index_mapper = {sample: index for index, sample in enumerate(variants.header.samples)}
+    sample_index = 0
+
+    sample_name_match = False
+    number_of_matches = 0
+    for name, index in sample_format_index_mapper.items():
+        if re.search(sample_name_regex, name):
+            sample_index = index
+            sample_name_match = True
+            number_of_matches = number_of_matches + 1
+
+    if number_of_matches > 1:
+        raise Exception("More then one sample match regex")
+
+    if not sample_name_match and len(sample_format_index_mapper) > 1:
+        raise Exception("More then one sample and no regex")
+
+    if sample_name_match:
+        log.info(f"Using index: {sample_index}, found using regex {sample_name_regex}")
+    else:
+        log.info(f"Using default index: {sample_index}, nothing found using regex {sample_name_regex}")
+
     log.info("Process variants")
-    annotation_extractor['FORMAT'] = utils.get_annotation_data_format
+    annotation_extractor['FORMAT'] = utils.get_annotation_data_format(sample_index)
     annotation_extractor['INFO'] = utils.get_annotation_data_info
+    annotation_extractor['QUAL'] = lambda variant: None if variant.qual == '.' else variant.qual
     expression_converter = create_convert_expression_function(annotation_extractor)
 
     vcf_filters = []
@@ -384,8 +430,9 @@ def filter_variants(in_vcf, out_vcf, filter_yaml_file):
 
 
 if __name__ == "__main__":
+    sample_name_regex = snakemake.params.sample_name_regex
     in_vcf = snakemake.input.vcf
     out_vcf = snakemake.output.vcf
     filter_yaml_file = snakemake.params.filter_config
 
-    filter_variants(in_vcf, out_vcf, filter_yaml_file)
+    filter_variants(sample_name_regex, in_vcf, out_vcf, filter_yaml_file)
