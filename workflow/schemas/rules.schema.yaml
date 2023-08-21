@@ -1,0 +1,85 @@
+$schema: "http://json-schema.org/draft-04/schema#"
+description: snakemake rule input and output files description file
+type: object
+properties:
+  bcftools_filter_exclude_region:
+    type: object
+    description: input and output parameters for bcftools_filter_exclude_region
+    properties:
+      input:
+        type: object
+        description: list of inputs
+        properties:
+          vcf:
+            type: string
+            description: path to vcf file that will be filtered
+          tabix:
+            type: string
+            description: path to index file of vcf file that will be filtered
+      output:
+        type: object
+        description: list of outputs
+        properties:
+          vcf:
+            type: string
+            description: output path for filtered vcf file
+  
+  bcftools_filter_include_region:
+    type: object
+    description: input and output parameters for bcftools_filter_include_region
+    properties:
+      input:
+        type: object
+        description: list of inputs
+        properties:
+          vcf:
+            type: string
+            description: path to vcf file that will be filtered
+          tabix:
+            type: string
+            description: path to index file of vcf that will be filtered
+      output:
+        type: object
+        description: list of outputs
+        properties:
+          vcf:
+            type: string
+            description: output path for filtered vcf file
+
+  bcftools_view:
+    type: object
+    description: input and output parameters for bcbio_view
+    properties:
+      input:
+        type: object
+        description: list of inputs
+        properties:
+          vcf:
+            type: string
+            description: path to vcf file that will be filtered
+      output:
+        type: object
+        description: list of outputs
+        properties:
+          vcf:
+            type: string
+            description: output path for filtered vcf file
+
+  filter_vcf:
+    type: object
+    description: input and output parameters for filter_vcf
+    properties:
+      input:
+        type: object
+        description: list of inputs
+        properties:
+          vcf:
+            type: string
+            description: path to vcf file that will be filtered
+      output:
+        type: object
+        description: list of outputs
+        properties:
+          vcf:
+            type: string
+            description: output path for filtered vcf file
