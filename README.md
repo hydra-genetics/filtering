@@ -1,3 +1,7 @@
+<p align="center">
+<a href="https://hydra-genetics-filtering.readthedocs.io">https://hydra-genetics-filtering.readthedocs.io</a>
+</p>
+
 # <img src="https://github.com/hydra-genetics/biomarker/blob/master/images/hydragenetics.png" width=40 /> hydra-genetics/filtering
 
 Collection of variant filters
