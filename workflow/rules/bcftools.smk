@@ -88,7 +88,7 @@ rule bcftools_view:
         + " "
         + config.get("bcftools_view", {}).get(wildcards.tag, ""),
     log:
-        "{file}.bcftools_view..{tag}vcf.log",
+        "{file}.bcftools_view.{tag}.vcf.log",
     benchmark:
         repeat(
             "{file}.bcftools_view.{tag}.vcf.benchmark.tsv",
