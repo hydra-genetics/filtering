@@ -49,7 +49,7 @@ def compile_output_list(wildcards):
             ".background_annotation.exclude.noexon1.vcf.gz",
             ".background_annotation.filter.snv_soft_filter.vcf",
             ".background_annotation.filter.snv_hard_filter.vcf",
-            ".background_annotation.bcftools_view.vcf.gz",
+            ".background_annotation.bcftools_view.PASS.vcf.gz",
         ]
     }
     output_files = [

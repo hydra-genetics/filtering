@@ -17,6 +17,7 @@ bcftools_filter_exclude_region:
   noexon1: "reference/twist_DNA_solid.HES45.annotated.noexon1.bed"
 
 bcftools_view:
+  PASS: " --apply-filter PASS "
   extra: " "
 
 filter_vcf:

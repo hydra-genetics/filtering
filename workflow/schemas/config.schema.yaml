@@ -41,12 +41,14 @@ properties:
       container:
         type: string
         description: name or path to docker/singularity container
-      filter:
+      TAG_NAME:
         type: string
-        description: Exclude variants in vcf file based on regions in bed file. INDELs are exluded based on start position.
+        description: |
+          the key TAG_NAME must be the same as the wildcard {tag}, found in the output file path. We can have multiple different TAG_NAME where each TAG_NAME points to a bed file used to
+          exclude regions. INDELs are excluded based on start position.
       extra:
         type: string
-        description: extra parameters
+        description: extra parameters applied to all TAG_NAME files
 
   bcftools_filter_include_region:
     type: object
@@ -58,12 +60,14 @@ properties:
       container:
         type: string
         description: name or path to docker/singularity container
-      filter:
+      TAG_NAME:
         type: string
-        description: Include variants in vcf file based on regions in bed file. Overlapping regions lead to duplicated variants.
+        description: | 
+          the key TAG_NAME must be the same as the wildcard {tag}, found in the output file path. We can have multiple different TAG_NAME where each TAG_NAME points to a bed file used to exclude
+          regions. INDELs are excluded based on start position. Overlapping regions lead to duplicated variants.
       extra:
         type: string
-        description: extra parameters
+        description: extra parameters applied to all TAG_NAME files
 
   bcftools_view:
     type: object
@@ -75,9 +79,14 @@ properties:
       container:
         type: string
         description: name or path to docker/singularity container
+      TAG_NAME:
+        type: string
+        description: |
+          the key TAG_NAME must be the same as the wildcard {tag}, found in the output file path. We can have multiple different TAG_NAME where each TAG_NAME define settings 
+          (e.g --apply-filter PASS or -M2 -m2 -v snps) that will be forwarded to bcftools view.
       extra:
         type: string
-        description: parameters for filtering/subset data e.g. --apply-filter PASS or -M2 -m2 -v snps
+        description: extra parameters that will be added to all TAG_NAME settings
 
   filter_vcf:
     type: object
@@ -89,8 +98,11 @@ properties:
       container:
         type: string
         description: name or path to docker/singularity container
-      filter_config:
+      TAG_NAME:
         type: string
+        description: | 
+          the key TAG_NAME must be the same as the wildcard {tag}, found in the output file path. We can have multiple different TAG_NAME where each TAG_NAME points to 
+          a yaml file with filter settings
         description: Config file specifying which filters should be applied.
       sample_name_regex:
         type: string
