@@ -82,14 +82,16 @@ rule bcftools_view:
     input:
         vcf="{file}.vcf.gz",
     output:
-        vcf=temp("{file}.bcftools_view.vcf.gz"),
+        vcf=temp("{file}.bcftools_view.{tag}.vcf.gz"),
     params:
-        extra=config.get("bcftools_view", {}).get("extra", ""),
+        extra=lambda wildcards: config.get("bcftools_view", {}).get("extra", "")
+        + " "
+        + config.get("bcftools_view", {}).get(wildcards.tag, ""),
     log:
-        "{file}.bcftools_view.vcf.log",
+        "{file}.bcftools_view..{tag}vcf.log",
     benchmark:
         repeat(
-            "{file}.bcftools_view.vcf.benchmark.tsv",
+            "{file}.bcftools_view.{tag}.vcf.benchmark.tsv",
             config.get("bcftools_view", {}).get("benchmark_repeats", 1),
         )
     threads: config.get("bcftools_view", {}).get("threads", config["default_resources"]["threads"])
