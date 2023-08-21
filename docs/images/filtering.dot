@@ -1,0 +1,26 @@
+digraph snakemake_dag {
+	rankdir=LR;
+    graph[bgcolor=white, margin=0];
+    node[shape=box, style=rounded, fontname=sans,                 fontsize=10, penwidth=2];
+    edge[penwidth=2, color=grey];
+	20[label = "filtered vcf", color = "0.0 0.0 0.0", style="dotted"];
+	21[label = "filtered vcf", color = "0.0 0.0 0.0", style="dotted"];
+	22[label = "filtered vcf", color = "0.0 0.0 0.0", style="dotted"];
+	23[label = "filtered vcf", color = "0.0 0.0 0.0", style="dotted"];
+	10[label = "vcf", color = "0.0 0.0 0.0", style="dotted"];
+	11[label = "vcf", color = "0.0 0.0 0.0", style="dotted"];
+	12[label = "vcf", color = "0.0 0.0 0.0", style="dotted"];
+	13[label = "vcf", color = "0.0 0.0 0.0", style="dotted"];
+	1[label = "bcftools_filter_include_region", color = "0.53 0.6 0.85", style="rounded"];
+	2[label = "bcftools_filter_exclude_region", color = "0.00 0.6 0.85", style="rounded"];
+	3[label = "filter_vcf", color = "0.40 0.6 0.85", style="rounded"];
+	4[label = "bcftools_view", color = "0.27 0.6 0.85", style="rounded"];
+	1 -> 20
+	2 -> 21
+	4 -> 22
+	3 -> 23
+	10 -> 1
+	11 -> 2
+	12 -> 4
+	13 -> 3
+}            
