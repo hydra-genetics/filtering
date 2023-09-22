@@ -8,6 +8,7 @@ rule filter_vcf:
     input:
         vcf="{file}.vcf.gz",
         vcf_index="{file}.vcf.gz.tbi",
+        filter_config=lambda wildcards: config["filter_vcf"][wildcards.tag],
     output:
         vcf=temp("{file}.filter.{tag}.vcf"),
     params:
