@@ -76,6 +76,9 @@ properties:
           vcf:
             type: string
             description: path to vcf file that will be filtered
+          filter_config:
+            type: string
+            description: path to filter config based on tag in config.yaml
       output:
         type: object
         description: list of outputs
