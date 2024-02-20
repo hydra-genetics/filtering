@@ -17,7 +17,7 @@ rule filter_vcf:
     log:
         "{file}.filter.{tag}.log",
     benchmark:
-        repeat("{file}.filter.{tag}.benchmark.tsv", config.get("filter_vcf", {}).get("benchmark_repeats", 1))
+        repeat("{file}.filter.{tag}.vcf.benchmark.tsv", config.get("filter_vcf", {}).get("benchmark_repeats", 1))
     threads: config.get("filter_vcf", {}).get("threads", config["default_resources"]["threads"])
     resources:
         mem_mb=config.get("filter_vcf", {}).get("mem_mb", config["default_resources"]["mem_mb"]),
