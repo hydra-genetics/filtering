@@ -1,0 +1,6 @@
+drmaa==0.7.9
+hydra-genetics==1.14.0
+jinja2==3.0.1
+pandas>=1.3.1
+snakemake>=8,<9
+singularity==3.0.0
