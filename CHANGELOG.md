@@ -1,5 +1,31 @@
 # Changelog
 
+## [1.0.0](https://www.github.com/hydra-genetics/filtering/compare/v0.3.0...v1.0.0) (2024-03-18)
+
+
+### ⚠ BREAKING CHANGES
+
+* make sure that bcftool view have the same config structure as the other tools
+
+### Features
+
+* make sure that bcftool view have the same config structure as the other tools ([8401890](https://www.github.com/hydra-genetics/filtering/commit/8401890936aeb0cd919b300a278365e5940bc897))
+
+
+### Bug Fixes
+
+* add constraint to tag wildcard ([d42b109](https://www.github.com/hydra-genetics/filtering/commit/d42b1096a92f36c53c5aceb557c75ec5c6a18225))
+* add filter_config to input in filter_vcf.smk ([a5fece9](https://www.github.com/hydra-genetics/filtering/commit/a5fece950bb197e525149cfde4f315f8857c57c6))
+
+
+### Documentation
+
+* add filter_config to rules.schema.yaml for filter_vcf ([844d783](https://www.github.com/hydra-genetics/filtering/commit/844d783b169754b6ba1df657b544d9f482a208c3))
+* readthedocs files ([cd17028](https://www.github.com/hydra-genetics/filtering/commit/cd170280e8bd96b64baa3649dbfc16ff2ac5ae4f))
+* update mkdocs rule plugin ([a74e671](https://www.github.com/hydra-genetics/filtering/commit/a74e67157aabefb169d53c810de5b9e1fb570bfc))
+* update readme with link to readthedocs ([cadd918](https://www.github.com/hydra-genetics/filtering/commit/cadd918af2b60d35ef5d20584cabc842cb0a6779))
+* update workflow/schemas/rules.schema.yaml ([4c07cc5](https://www.github.com/hydra-genetics/filtering/commit/4c07cc536c018b6d5d74c6ae8b1a40a03c71f83a))
+
 ## [0.3.0](https://www.github.com/hydra-genetics/filtering/compare/v0.2.0...v0.3.0) (2023-06-28)
 
 
