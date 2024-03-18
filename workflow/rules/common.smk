@@ -40,6 +40,7 @@ validate(units, schema="../schemas/units.schema.yaml")
 wildcard_constraints:
     sample="|".join(samples.index),
     unit="N|T|R",
+    tag="[^.]+",
 
 
 def compile_output_list(wildcards):
@@ -49,7 +50,7 @@ def compile_output_list(wildcards):
             ".background_annotation.exclude.noexon1.vcf.gz",
             ".background_annotation.filter.snv_soft_filter.vcf",
             ".background_annotation.filter.snv_hard_filter.vcf",
-            ".background_annotation.bcftools_view.vcf.gz",
+            ".background_annotation.bcftools_view.PASS.vcf.gz",
         ]
     }
     output_files = [
