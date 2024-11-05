@@ -366,8 +366,8 @@ def filter_variants(sample_name_regex, in_vcf, out_vcf, filter_yaml_file):
         if record.type == "INFO":
             if record['ID'] == "CSQ":
                 log.info(" -- found vep information: {}".format(in_vcf))
-                log.debug(" -- -- {}".format(record['Description'].split("Format: ")[1].split("|")))
-                vep_fields = {v: c for c, v in enumerate(record['Description'].split("Format: ")[1].split("|"))}
+                log.debug(" -- -- {}".format(record['Description'].split("Format: ")[1].split('">')[0].split("|")))
+                vep_fields = {v: c for c, v in enumerate(record['Description'].split("Format: ")[1].split('">')[0].split("|"))}
                 annotation_extractor["VEP"] = utils.get_annotation_data_vep(vep_fields)
 
     vcf_out = VariantFile(out_vcf, 'w', header=variants.header)
