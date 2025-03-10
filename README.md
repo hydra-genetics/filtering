@@ -81,9 +81,9 @@ Add the module to your `Snakefile` like so:
 module biomarker:
     snakefile:
         github(
-            "hydra-genetics/filter",
+            "hydra-genetics/filtering",
             path="workflow/Snakefile",
-            tag="v0.1.0",
+            tag="v1.0.0",
         )
     config:
         config
