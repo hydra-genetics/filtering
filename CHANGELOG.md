@@ -1,5 +1,20 @@
 # Changelog
 
+## [1.1.0](https://www.github.com/hydra-genetics/filtering/compare/v1.0.0...v1.1.0) (2025-03-11)
+
+
+### Features
+
+* add separate units parsing for PACBIO and ONT ([cd92dc2](https://www.github.com/hydra-genetics/filtering/commit/cd92dc2e6d59959e4dc00de625f9a992f2d0d4cd))
+
+
+### Bug Fixes
+
+* Correct reading VEP header from vcf ([987031a](https://www.github.com/hydra-genetics/filtering/commit/987031a87a6ef7c8e13a1d778ef5bbdb800f756a))
+* make units.schema.yaml flexible ([290df7c](https://www.github.com/hydra-genetics/filtering/commit/290df7ca8d35920e18053b033c2b64474830de23))
+* sample_name_regex default string ([122ad20](https://www.github.com/hydra-genetics/filtering/commit/122ad20d54f765f950dae6fe873f017247ebafab))
+* typo in the module name and version in Usage section ([1d8bf9e](https://www.github.com/hydra-genetics/filtering/commit/1d8bf9e6ff60080d57bf4898b0c811fa357f7f5a))
+
 ## [1.0.0](https://www.github.com/hydra-genetics/filtering/compare/v0.3.0...v1.0.0) (2024-03-18)
 
 
