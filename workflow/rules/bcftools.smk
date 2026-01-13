@@ -32,7 +32,7 @@ rule bcftools_filter_include_region:
     container:
         config.get("bcftools_filter_include_region", {}).get("container", config["default_container"])
     message:
-        "{rule}: Use bedtools to include variants in vcf overlapping bed: {output.vcf}"
+        "{rule}: Use bcftools to include variants in vcf overlapping bed: {output.vcf}"
     shell:
         "(bcftools filter "
         "{params.filter} "
@@ -69,7 +69,7 @@ rule bcftools_filter_exclude_region:
     container:
         config.get("bcftools_filter_exclude_region", {}).get("container", config["default_container"])
     message:
-        "{rule}: use bedtools to exclude variants in vcf overlapping bed: {output.vcf}"
+        "{rule}: use bcftools to exclude variants in vcf overlapping bed: {output.vcf}"
     shell:
         "(bcftools filter "
         "{params.filter} "
