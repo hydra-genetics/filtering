@@ -9,7 +9,6 @@ repos:
         name: snakefmt
         language: system
         entry: snakefmt --check --config .github/linters/.snakefmt.toml
-        types_or: [python]
         files: "^workflow/.*\\.smk$|^workflow/Snakefile$"
         stages: [pre-commit]
 
