@@ -376,6 +376,17 @@ class TestUnitUtils(unittest.TestCase):
             filter_variants("^[A-Za-z0-9-]+_[RN]{1}$", self.in_vcf, out_vcf,
                             ".tests/unit/config_filter_format_missing_value_unittest_3.yaml")
 
+    def test_invalid_soft_filter_flag(self):
+        # "<", ">", "," and ";" break the ##FILTER=<ID=...> header line, either corrupting the
+        # FILTER column or making the write fail inside pysam. Reject them up front instead.
+        tempdir = tempfile.mkdtemp()
+        vcf = os.path.join(tempdir, "test.vcf")
+        with open(vcf, 'w', encoding="ascii") as out_vcf:
+            with self.assertRaises(Exception) as context:
+                filter_variants("^([A-Za-z0-9-]+_[RN]{1})$", self.in_vcf, out_vcf,
+                                ".tests/unit/config_filter_invalid_soft_filter_flag.yaml")
+        self.assertIn("Invalid soft_filter_flag", str(context.exception))
+
     def test_qual_filter(self):
         test_table = {
                 "chr1:934486-934487": False,  # .

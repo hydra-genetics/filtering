@@ -7,7 +7,7 @@ filters:
   ad:
     description: "Soft filter low AD"
     expression: "FORMAT:AD:1 < 60"
-    soft_filter_flag: "AD<60"
+    soft_filter_flag: "AD_lt_60"
     soft_filter: "True"
   germline:
     description: "Soft filter germline"

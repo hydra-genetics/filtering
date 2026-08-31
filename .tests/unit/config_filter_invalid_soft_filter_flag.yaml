@@ -1,0 +1,6 @@
+filters:
+  invalid_flag:
+    description: "Soft filter flag containing characters that are illegal in a VCF FILTER id"
+    expression: "(FORMAT:AD:1 > 200)"
+    soft_filter_flag: "AD>200"
+    soft_filter: "True"
