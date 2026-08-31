@@ -106,4 +106,4 @@ rule bcftools_view:
     message:
         "{rule}: Use bcftools view to get subset or filter {input.vcf}"
     wrapper:
-        "v1.24.0/bio/bcftools/view"
+        "v9.16.0/bio/bcftools/view"

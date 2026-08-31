@@ -7,6 +7,11 @@ from hydra_genetics.utils.io import utils
 from pysam import VariantFile
 
 
+# characters that cannot appear in a VCF FILTER ID: "<" and ">" corrupt the
+# ##FILTER=<ID=...> header line, "," and ";" are field/value separators
+INVALID_FILTER_FLAG = re.compile(r"[<>,;\s]")
+
+
 def is_float(element) -> bool:
     try:
         float(element)
@@ -343,7 +348,13 @@ def check_yaml_file(variants, filters):
         else:
             filter_text = "%s %s" % (filters["filters"][filter]["description"], "(hard filtered)")
         if "soft_filter_flag" in filters["filters"][filter]:
-            variants.header.filters.add(filters["filters"][filter]["soft_filter_flag"], None, None, filter_text)
+            flag = filters["filters"][filter]["soft_filter_flag"]
+            if INVALID_FILTER_FLAG.search(flag):
+                raise Exception(
+                    "Invalid soft_filter_flag '%s' for %s: a VCF FILTER id may not contain '<', '>', ',', ';' "
+                    "or whitespace. Use for example '_lt_'/'_gt_' instead of '<'/'>'." % (flag, filter)
+                )
+            variants.header.filters.add(flag, None, None, filter_text)
 
 
 def filter_variants(sample_name_regex, in_vcf, out_vcf, filter_yaml_file):

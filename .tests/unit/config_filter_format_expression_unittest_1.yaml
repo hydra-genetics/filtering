@@ -1,4 +1,4 @@
 filters:
   ad:
-    soft_filter_flag: "AD>200"
+    soft_filter_flag: "AD_gt_200"
     expression: "FORMAT:AD:1 > 200"

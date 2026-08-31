@@ -1,20 +1,7 @@
-$schema: "http://json-schema.org/draft-04/schema#"
+$schema: "https://json-schema.org/draft/2020-12/schema"
 description: snakemake configuration file
 type: object
 properties:
-  reference:
-    fasta:
-      type: string
-      description: file with reference fasta file
-    required:
-      - fasta
-
-  required:
-    - default_container
-    - resources
-    - samples
-    - units
-
   default_container:
     type: string
     description: name or path to a default docker/singularity container
@@ -107,3 +94,9 @@ properties:
       sample_name_regex:
         type: string
         description: Regex used to match which sample column that will be used for filtering.
+
+required:
+  - default_container
+  - resources
+  - samples
+  - units
